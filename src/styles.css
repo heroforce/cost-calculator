@@ -1,0 +1,531 @@
+/* HeroForce brand — dark purple, glassmorphism, gradient type. */
+
+:root {
+  --bg: #0d0020;
+  --purple: #7622d7;
+  --accent: #9747ff;
+
+  --text: #ffffff;
+  --text-85: rgba(255, 255, 255, 0.85);
+  --text-45: rgba(255, 255, 255, 0.45);
+
+  --glass: rgba(255, 255, 255, 0.04);
+  --glass-strong: rgba(255, 255, 255, 0.07);
+  --border: rgba(255, 255, 255, 0.1);
+  --border-soft: rgba(255, 255, 255, 0.06);
+
+  --radius: 16px;
+  --radius-sm: 10px;
+
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Helvetica, Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Backdrop: radial glow from top centre over a subtle dot grid. */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.backdrop::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+  background-size: 26px 26px;
+  mask-image: radial-gradient(ellipse 90% 65% at 50% 0%, #000 35%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 65% at 50% 0%, #000 35%, transparent 100%);
+}
+
+.backdrop::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 48% at 50% -8%, rgba(151, 71, 255, 0.42), transparent 70%),
+    radial-gradient(ellipse 45% 32% at 50% 2%, rgba(118, 34, 215, 0.34), transparent 72%);
+}
+
+.shell {
+  position: relative;
+  z-index: 1;
+  max-width: 1220px;
+  margin: 0 auto;
+  padding: 56px 24px 96px;
+}
+
+/* ---------- Header ---------- */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 15px 7px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(151, 71, 255, 0.4);
+  background: rgba(151, 71, 255, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--text-85);
+}
+
+.badge svg {
+  flex: none;
+  color: var(--accent);
+}
+
+h1 {
+  margin: 22px 0 12px;
+  font-size: clamp(2.1rem, 5vw, 3.4rem);
+  line-height: 1.08;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  background: linear-gradient(135deg, #ffffff 18%, #d6bcff 62%, #9747ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.lede {
+  margin: 0;
+  max-width: 62ch;
+  color: var(--text-45);
+  font-size: 16px;
+}
+
+/* ---------- Cards ---------- */
+
+.card {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.section {
+  margin-top: 32px;
+  padding: 26px;
+}
+
+.section-title {
+  margin: 0 0 4px;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.section-sub {
+  margin: 0 0 20px;
+  font-size: 13px;
+  color: var(--text-45);
+}
+
+/* ---------- Controls ---------- */
+
+.controls {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field label {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text-45);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.field select,
+.field input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 15px;
+  appearance: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.field select {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' stroke='rgba(255,255,255,0.5)' stroke-width='1.6' fill='none' stroke-linecap='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+
+.field select option {
+  background: #1a0a33;
+  color: var(--text);
+}
+
+.field select:focus,
+.field input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: rgba(151, 71, 255, 0.1);
+}
+
+.field .hint {
+  font-size: 12px;
+  color: var(--text-45);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.input-wrap {
+  position: relative;
+}
+
+.input-wrap .prefix {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-45);
+  font-size: 15px;
+  pointer-events: none;
+}
+
+.input-wrap input {
+  padding-left: 44px;
+}
+
+/* ---------- Summary cards ---------- */
+
+.summary {
+  margin-top: 32px;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+}
+
+.stat {
+  padding: 22px;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat.highlight {
+  background: linear-gradient(150deg, rgba(151, 71, 255, 0.2), rgba(118, 34, 215, 0.07));
+  border-color: rgba(151, 71, 255, 0.34);
+}
+
+.stat-label {
+  margin: 0 0 10px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-45);
+}
+
+.stat-value {
+  font-size: clamp(1.35rem, 2.6vw, 1.85rem);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.stat-sub {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--text-45);
+}
+
+/* ---------- Table ---------- */
+
+.table-scroll {
+  overflow-x: auto;
+  margin: 0 -6px;
+  padding: 0 6px;
+}
+
+table {
+  width: 100%;
+  min-width: 900px;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+thead th {
+  padding: 10px 12px;
+  text-align: right;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-45);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+thead th:first-child,
+thead th.left {
+  text-align: left;
+}
+
+thead tr.group th {
+  border-bottom: none;
+  padding-bottom: 4px;
+  color: var(--accent);
+  font-size: 10.5px;
+}
+
+tbody td {
+  padding: 12px;
+  text-align: right;
+  border-bottom: 1px solid var(--border-soft);
+  color: var(--text-85);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+tbody td.left {
+  text-align: left;
+  color: var(--text);
+  font-weight: 500;
+  white-space: normal;
+}
+
+tbody td.note {
+  text-align: left;
+  white-space: normal;
+  min-width: 280px;
+  max-width: 420px;
+  color: var(--text-45);
+  font-size: 12px;
+  line-height: 1.45;
+  font-weight: 400;
+}
+
+tbody tr.zero td {
+  color: var(--text-45);
+}
+
+tbody tr.total td {
+  border-top: 1px solid var(--border);
+  border-bottom: none;
+  padding-top: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+tbody tr.grand td {
+  color: var(--accent);
+  font-size: 14.5px;
+}
+
+td.compare,
+th.compare {
+  color: var(--text-45);
+}
+
+.unverified-chip {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 186, 92, 0.4);
+  background: rgba(255, 186, 92, 0.12);
+  color: #ffba5c;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
+/* ---------- Stacked bar ---------- */
+
+.bar {
+  display: flex;
+  height: 46px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.bar-seg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: flex-basis 0.35s ease;
+}
+
+.bar-seg.gross {
+  background: linear-gradient(90deg, #5b18a8, #7622d7);
+}
+
+.bar-seg.employer {
+  background: linear-gradient(90deg, #9747ff, #c08cff);
+}
+
+.bar-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--text-85);
+}
+
+.bar-legend span.swatch {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 3px;
+  margin-right: 8px;
+  vertical-align: baseline;
+}
+
+.bar-legend .swatch.gross {
+  background: #7622d7;
+}
+
+.bar-legend .swatch.employer {
+  background: #9747ff;
+}
+
+.bar-legend .amount {
+  color: var(--text-45);
+  margin-left: 6px;
+}
+
+/* ---------- Leave & benefits ---------- */
+
+.leave-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+}
+
+.leave-card {
+  padding: 20px;
+  background: var(--glass-strong);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+}
+
+.leave-card .k {
+  font-size: 11.5px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-45);
+  margin-bottom: 10px;
+}
+
+.leave-card .v {
+  font-size: 1.5rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+
+.leave-card .u {
+  font-size: 13px;
+  color: var(--text-45);
+  margin-top: 4px;
+}
+
+/* ---------- Banners ---------- */
+
+.banner {
+  margin-top: 24px;
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 13.5px;
+  line-height: 1.5;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.banner.warn {
+  border: 1px solid rgba(255, 186, 92, 0.32);
+  background: rgba(255, 186, 92, 0.09);
+  color: #ffd9a3;
+}
+
+.banner.info {
+  border: 1px solid var(--border);
+  background: var(--glass);
+  color: var(--text-45);
+}
+
+.banner strong {
+  color: #ffba5c;
+}
+
+.banner.info strong {
+  color: var(--text-85);
+}
+
+.fx-line {
+  margin-top: 10px;
+  font-size: 12.5px;
+  color: var(--text-45);
+}
+
+.fx-line.error {
+  color: #ffba5c;
+}
+
+footer {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-soft);
+  font-size: 12.5px;
+  color: var(--text-45);
+  line-height: 1.6;
+}
+
+@media (max-width: 640px) {
+  .shell {
+    padding: 36px 16px 64px;
+  }
+  .section {
+    padding: 20px 16px;
+  }
+}
