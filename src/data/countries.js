@@ -12,7 +12,7 @@
  *   symbol      What prefixes the number on screen.
  *   verified    true  = every line checked against a primary source (the
  *                       national revenue or social security authority).
- *               false = needs your review before client use. The UI shows a
+ *               false = needs review before client use. The UI shows a
  *                       warning banner for these.
  *   excludeELI  true suppresses the global 1% Employer Liability Insurance line.
  *   employer    The contribution lines. Shapes documented in src/lib/calc.js.
@@ -23,13 +23,15 @@
  * salary the rate applies to; "contribution" caps the resulting amount.
  *
  * All cap / exempt figures are ANNUAL in local currency. Where a statute is
- * written monthly (most of Asia) the note records the monthly figure and the
- * cap is the annualised x12 value.
+ * written monthly (most of Asia and Latin America) the note records the
+ * monthly figure and the cap is the annualised x12 value.
+ *
+ * Last verification pass: 31 July 2026.
  */
 
 export const countries = {
   /* ==========================================================================
-   * VERIFIED — checked against primary sources, July 2026
+   * ASIA PACIFIC
    * ======================================================================== */
 
   Australia: {
@@ -74,54 +76,6 @@ export const countries = {
     },
     leave: { annualDays: 20, sickDays: 10, parentalWeeks: 26 },
     minWage: { amount: 23.95, period: 'hr' },
-  },
-
-  'United Kingdom': {
-    currency: 'GBP',
-    symbol: '£',
-    verified: true,
-    excludeELI: false,
-    employer: {
-      'Employer National Insurance (Class 1 Secondary)': {
-        rate: 0.15,
-        exempt: 5000,
-        note: 'HMRC. 15% on earnings above the £5,000/yr Secondary Threshold, from 6 Apr 2025. Rate and threshold unchanged for 2026-27 and frozen to 2030-31.',
-      },
-      'Workplace Pension (auto-enrolment minimum)': {
-        rate: 0.03,
-        exempt: 6240,
-        cap: 50270,
-        capType: 'base',
-        note: 'The Pensions Regulator. Minimum 3% employer contribution on qualifying earnings — the band from £6,240 to £50,270/yr. 2026-27 band. Many employers contribute on full salary instead, which costs more.',
-      },
-    },
-    leave: { annualDays: 28, sickDays: 0, parentalWeeks: 52 },
-    minWage: { amount: 12.71, period: 'hr' },
-  },
-
-  Ireland: {
-    currency: 'EUR',
-    symbol: '€',
-    verified: true,
-    excludeELI: false,
-    employer: {
-      'Pay-Related Social Insurance (PRSI, Class A)': {
-        tiers: [
-          { upTo: 28704, rate: 0.09 },
-          { upTo: Infinity, rate: 0.1125 },
-        ],
-        tierMode: 'whole',
-        note: 'Revenue.ie. 9.00% on weekly earnings up to €552, 11.25% above €552 — and the higher rate applies to ALL earnings, not just the excess, which is why this is a banded rather than marginal rate. Threshold annualised as €552 x 52 = €28,704. Both rates rise on 1 Oct 2026 to 9.15% / 11.40%.',
-      },
-      'My Future Fund (auto-enrolment)': {
-        rate: 0.015,
-        cap: 80000,
-        capType: 'base',
-        note: 'Ireland\'s auto-enrolment pension, live from 1 Jan 2026. Employer contributes 1.5% of gross earnings up to €80,000, rising by 1.5 points every three years to 6% by 2035. Applies to employees aged 23-60 earning over €20,000/yr who are not already in a workplace scheme.',
-      },
-    },
-    leave: { annualDays: 20, sickDays: 5, parentalWeeks: 26 },
-    minWage: { amount: 14.15, period: 'hr' },
   },
 
   Philippines: {
@@ -219,6 +173,120 @@ export const countries = {
     minWage: { amount: 1700, period: 'mo' },
   },
 
+  Indonesia: {
+    currency: 'IDR',
+    symbol: 'Rp',
+    verified: true,
+    excludeELI: false,
+    employer: {
+      'BPJS Kesehatan (Health)': {
+        rate: 0.04,
+        cap: 144000000,
+        capType: 'base',
+        note: 'BPJS Kesehatan. 4% employer share of the 5% total. Salary ceiling Rp 12,000,000/mo, annualised to Rp 144,000,000. 2026.',
+      },
+      'JHT (Old Age Security)': {
+        rate: 0.037,
+        note: 'BPJS Ketenagakerjaan. 3.7% employer share of the 5.7% total, assessed on fixed monthly income with no ceiling. 2026.',
+      },
+      'JP (Pension Security)': {
+        rate: 0.02,
+        cap: 133035600,
+        capType: 'base',
+        note: 'BPJS Ketenagakerjaan. 2% employer share of the 3% total. Salary ceiling raised to Rp 11,086,300/mo at the March 2026 update, annualised to Rp 133,035,600. The ceiling is reindexed annually — check it each March.',
+      },
+      'JKK (Work Accident)': {
+        rate: 0.0024,
+        note: 'BPJS Ketenagakerjaan. Risk-rated across five bands from 0.24% to 1.74%. 0.24% is the lowest band, which is the correct one for office-based work. 2026.',
+      },
+      'JKM (Death Benefit)': {
+        rate: 0.003,
+        note: 'BPJS Ketenagakerjaan. 0.30%, employer-funded in full, no ceiling. 2026.',
+      },
+      'THR (Religious Holiday Allowance)': {
+        rate: 0.083333,
+        note: 'Mandatory one month\'s salary paid annually before the religious holiday. Assumes the salary entered represents 12 monthly payments.',
+      },
+    },
+    leave: { annualDays: 12, sickDays: 0, parentalWeeks: 13 },
+    minWage: { amount: 5400000, period: 'mo' },
+  },
+
+  Vietnam: {
+    currency: 'VND',
+    symbol: '₫',
+    verified: true,
+    excludeELI: false,
+    employer: {
+      'Social Insurance': {
+        rate: 0.175,
+        cap: 607200000,
+        capType: 'base',
+        note: 'Vietnam Social Security. 17.5% employer share covering retirement, sickness/maternity and occupational accident. Contribution base capped at 20x the reference level — VND 50,600,000/mo from 1 Jul 2026, annualised to VND 607,200,000.',
+      },
+      'Health Insurance': {
+        rate: 0.03,
+        cap: 607200000,
+        capType: 'base',
+        note: 'Vietnam Social Security. 3% employer share of the 4.5% total, same 20x reference-level ceiling as social insurance. From 1 Jul 2026.',
+      },
+      'Unemployment Insurance': {
+        rate: 0.01,
+        cap: 1190400000,
+        capType: 'base',
+        note: 'Vietnam Social Security. 1% employer share. This one is capped at 20x the REGIONAL minimum wage, not the reference level — VND 4,960,000/mo in Region I gives a ceiling of VND 99,200,000/mo. Lower in Regions II-IV.',
+      },
+      'Trade Union Fee': {
+        rate: 0.02,
+        cap: 607200000,
+        capType: 'base',
+        note: 'Vietnam General Confederation of Labour. 2% employer contribution to the trade union fund, payable whether or not a union exists at the workplace. Same ceiling as social insurance.',
+      },
+    },
+    leave: { annualDays: 12, sickDays: 30, parentalWeeks: 26 },
+    minWage: { amount: 4960000, period: 'mo' },
+  },
+
+  Thailand: {
+    currency: 'THB',
+    symbol: '฿',
+    verified: true,
+    excludeELI: false,
+    employer: {
+      'Social Security Fund': {
+        rate: 0.05,
+        cap: 210000,
+        capType: 'base',
+        note: 'Social Security Office. 5% employer share. The wage ceiling rose from THB 15,000 to THB 17,500/mo on 1 Jan 2026 under the Ministerial Regulation gazetted 12 Dec 2025 — maximum contribution THB 875/mo. Two further phased increases are legislated; check the ceiling annually.',
+      },
+      "Workmen's Compensation Fund": {
+        rate: 0.002,
+        cap: 240000,
+        capType: 'base',
+        note: 'Workmen\'s Compensation Fund, separate from the SSO. Risk-rated 0.2%-1.0%; 0.2% is the lowest band and the right one for office work. Wage ceiling THB 20,000/mo.',
+      },
+    },
+    leave: { annualDays: 6, sickDays: 30, parentalWeeks: 14 },
+    minWage: { amount: 400, period: 'day' },
+  },
+
+  'Hong Kong': {
+    currency: 'HKD',
+    symbol: 'HK$',
+    verified: true,
+    excludeELI: false,
+    employer: {
+      'MPF (Mandatory Provident Fund)': {
+        rate: 0.05,
+        cap: 360000,
+        capType: 'base',
+        note: 'MPFA. 5% employer contribution, relevant income ceiling HK$30,000/mo — caps at HK$1,500/mo. Note the employer pays 5% even below the HK$7,100/mo floor where the employee is exempt. The MPFA is reviewing a proposal to lift the ceiling to HK$40,000; report due mid-2026.',
+      },
+    },
+    leave: { annualDays: 7, sickDays: 12, parentalWeeks: 14 },
+    minWage: { amount: 42.1, period: 'hr' },
+  },
+
   India: {
     currency: 'INR',
     symbol: '₹',
@@ -246,7 +314,7 @@ export const countries = {
         capType: 'base',
         note: 'EPFO, notified Jul 2026. 0.5% of basic wages, employer-funded. EDLI administrative charges are waived.',
       },
-      'ESIC': {
+      ESIC: {
         rate: 0.0325,
         appliesUpTo: 252000,
         note: 'ESIC. 3.25% employer contribution, but only for employees with gross wages of ₹21,000/mo or less (₹25,000 for persons with disability). Shows as zero above that — which is correct, not a bug.',
@@ -260,6 +328,115 @@ export const countries = {
     leave: { annualDays: 15, sickDays: 12, parentalWeeks: 26 },
     minWage: { amount: 176, period: 'day' },
   },
+
+  Japan: {
+    currency: 'JPY',
+    symbol: '¥',
+    verified: true,
+    excludeELI: false,
+    employer: {
+      'Employees Pension Insurance': {
+        rate: 0.0915,
+        cap: 7800000,
+        capType: 'base',
+        note: 'Japan Pension Service. National flat rate 18.30% split evenly; employer share 9.15%. Standard monthly remuneration capped at ¥650,000 (Grade 32), annualised to ¥7,800,000.',
+      },
+      'Health Insurance': {
+        rate: 0.04925,
+        cap: 16680000,
+        capType: 'base',
+        note: 'Kyokai Kenpo, rates effective March 2026. Tokyo rate fell from 9.91% to 9.85%, split evenly — employer share 4.925%. Rates are set per prefecture and differ again for company health insurance societies. Standard monthly remuneration capped at ¥1,390,000.',
+      },
+      'Long-term Care Insurance': {
+        rate: 0.0081,
+        cap: 16680000,
+        capType: 'base',
+        note: 'Kyokai Kenpo. National rate rose to 1.62% for 2026, split evenly — employer share 0.81%. Applies only to employees aged 40 to 64.',
+      },
+      'Child & Childcare Support Levy': {
+        rate: 0.00115,
+        cap: 16680000,
+        capType: 'base',
+        note: 'New from April 2026. 0.23% collected alongside health insurance premiums and split evenly — employer share 0.115%.',
+      },
+      'Employment Insurance': {
+        rate: 0.0085,
+        note: 'Ministry of Health, Labour and Welfare, FY2026 (from April 2026). Employer share for general businesses: 0.5% unemployment plus 0.35% employment-two-business levy. The unemployment portion fell from 0.55% to 0.5% this year.',
+      },
+      "Workers' Accident Compensation": {
+        rate: 0.003,
+        note: 'Employer-only and industry-rated from 0.25% to 8.8%. 0.3% is the office-work band.',
+      },
+    },
+    leave: { annualDays: 10, sickDays: 0, parentalWeeks: 58 },
+    minWage: { amount: 1121, period: 'hr' },
+  },
+
+  'South Korea': {
+    currency: 'KRW',
+    symbol: '₩',
+    verified: true,
+    excludeELI: false,
+    employer: {
+      'National Pension': {
+        rate: 0.0475,
+        cap: 79080000,
+        capType: 'base',
+        note: 'National Pension Service. Total rate rose from 9% to 9.5% in 2026, split evenly — employer share 4.75%. This is the first step of a phased increase to 13% by 2033. Standard monthly income ceiling KRW 6,590,000 from July 2026 (was 6,370,000), annualised to KRW 79,080,000.',
+      },
+      'National Health Insurance': {
+        rate: 0.03595,
+        note: 'NHIS. Total rate rose to 7.19% for 2026, split evenly — employer share 3.595%. No ceiling.',
+      },
+      'Long-term Care Insurance': {
+        rate: 0.004656,
+        note: 'NHIS. Levied at 12.95% of the health insurance contribution rather than directly on salary; 0.4656% is the equivalent effective rate on gross for the employer share.',
+      },
+      'Employment Insurance': {
+        rate: 0.0115,
+        note: 'Ministry of Employment and Labor, 2026. Employer share for employers under 150 staff: 0.9% unemployment benefit plus 0.25% employment stability and vocational levy. Larger employers pay up to 1.65%.',
+      },
+      'Industrial Accident Insurance': {
+        rate: 0.007,
+        note: 'Employer-only and industry-rated. 0.7% is the office-work band; manufacturing and construction run several times higher.',
+      },
+    },
+    leave: { annualDays: 15, sickDays: 0, parentalWeeks: 52 },
+    minWage: { amount: 10320, period: 'hr' },
+  },
+
+  Taiwan: {
+    currency: 'TWD',
+    symbol: 'NT$',
+    verified: true,
+    excludeELI: false,
+    employer: {
+      'Labor & Employment Insurance': {
+        rate: 0.0805,
+        cap: 549600,
+        capType: 'base',
+        note: 'Bureau of Labor Insurance, 2026. Labor insurance 10.5% plus employment insurance 1% = 11.5%, of which the employer bears 70% — 8.05%. Insured salary ceiling NT$45,800/mo, annualised to NT$549,600. Assessed on a bracket table, not on actual pay.',
+      },
+      'National Health Insurance': {
+        rate: 0.0487,
+        cap: 3756000,
+        capType: 'base',
+        note: 'NHIA, 2026. Rate 5.17%; the employer bears 60% with an average dependant multiplier of 1.57 applied, giving an effective 4.87%. Insured salary ceiling NT$313,000/mo. A separate 2.11% supplementary premium applies to bonuses and irregular income, which is not modelled here.',
+      },
+      'Labor Pension': {
+        rate: 0.06,
+        cap: 1800000,
+        capType: 'base',
+        note: 'Bureau of Labor Funds, 2026. 6% mandatory employer contribution to the employee\'s individual pension account. Monthly wage ceiling NT$150,000, annualised to NT$1,800,000. Each of Taiwan\'s three schemes uses its own bracket table and its own ceiling.',
+      },
+    },
+    leave: { annualDays: 7, sickDays: 30, parentalWeeks: 8 },
+    minWage: { amount: 29500, period: 'mo' },
+  },
+
+  /* ==========================================================================
+   * AMERICAS
+   * ======================================================================== */
 
   'United States': {
     currency: 'USD',
@@ -341,6 +518,298 @@ export const countries = {
     },
     leave: { annualDays: 10, sickDays: 10, parentalWeeks: 40 },
     minWage: { amount: 17.75, period: 'hr' },
+  },
+
+  Mexico: {
+    currency: 'MXN',
+    symbol: 'MX$',
+    verified: true,
+    excludeELI: false,
+    employer: {
+      // IMSS is a stack of separate branches on the salario base de cotización
+      // (SBC), capped at 25 UMA. Daily UMA 2026 = MXN 113.14, so one annual UMA
+      // is 113.14 x 365 = 41,296.10 and the SBC ceiling is 1,032,402.50.
+      'IMSS — Sickness & Maternity (fixed quota)': {
+        fixedAnnual: 8423.44,
+        note: 'IMSS 2026. 20.40% of the daily UMA per worker per day, regardless of salary — a flat employer charge, not a percentage of pay. Daily UMA 2026 MXN 113.14, so 0.204 x 113.14 x 365 = MXN 8,423.44/yr.',
+      },
+      'IMSS — Sickness & Maternity (excess over 3 UMA)': {
+        rate: 0.011,
+        exempt: 123888.3,
+        cap: 1032402.5,
+        capType: 'base',
+        note: 'IMSS 2026. 1.10% employer on the portion of SBC above three UMA (MXN 123,888.30/yr). SBC ceiling 25 UMA.',
+      },
+      'IMSS — Sickness & Maternity (cash benefits)': {
+        rate: 0.007,
+        cap: 1032402.5,
+        capType: 'base',
+        note: 'IMSS 2026. 0.70% employer share (prestaciones en dinero) on SBC, capped at 25 UMA.',
+      },
+      'IMSS — Medical Expenses for Pensioners': {
+        rate: 0.0105,
+        cap: 1032402.5,
+        capType: 'base',
+        note: 'IMSS 2026. 1.05% employer share (gastos médicos pensionados) on SBC, capped at 25 UMA.',
+      },
+      'IMSS — Disability & Life': {
+        rate: 0.0175,
+        cap: 1032402.5,
+        capType: 'base',
+        note: 'IMSS 2026. 1.75% employer share (invalidez y vida) on SBC, capped at 25 UMA.',
+      },
+      'IMSS — Occupational Risk': {
+        rate: 0.0054,
+        cap: 1032402.5,
+        capType: 'base',
+        note: 'IMSS 2026. Risk-class-rated (riesgos de trabajo). 0.54% is the Class I minimum, correct for office work; Class V runs above 7%. Reassessed annually from the employer\'s own claims history.',
+      },
+      'IMSS — Nurseries & Social Benefits': {
+        rate: 0.01,
+        cap: 1032402.5,
+        capType: 'base',
+        note: 'IMSS 2026. 1.00% employer share (guarderías y prestaciones sociales) on SBC, capped at 25 UMA.',
+      },
+      'IMSS — Retirement (SAR)': {
+        rate: 0.02,
+        cap: 1032402.5,
+        capType: 'base',
+        note: 'IMSS 2026. 2.00% employer contribution to the retirement sub-account, capped at 25 UMA.',
+      },
+      'IMSS — Severance & Old Age (CEAV)': {
+        tiers: [
+          { upTo: 41296.1, rate: 0.0315 },
+          { upTo: 61944.15, rate: 0.03676 },
+          { upTo: 82592.2, rate: 0.04851 },
+          { upTo: 103240.25, rate: 0.05556 },
+          { upTo: 123888.3, rate: 0.06026 },
+          { upTo: 144536.35, rate: 0.06361 },
+          { upTo: 165184.4, rate: 0.06613 },
+          { upTo: Infinity, rate: 0.07513 },
+        ],
+        tierMode: 'whole',
+        note: 'IMSS 2026 (cesantía en edad avanzada y vejez). The band containing the SBC sets one rate applied to the whole SBC, so this is banded not marginal. Bands run 1.00 UMA at 3.150% up to 4.01+ UMA at 7.513%. Still stepping up annually under the Dec 2020 pension reform until 2030. Workers on exactly one minimum wage pay the 3.150% floor rate.',
+      },
+      'INFONAVIT (Housing)': {
+        rate: 0.05,
+        cap: 1032402.5,
+        capType: 'base',
+        note: 'INFONAVIT 2026. 5% employer contribution to the housing fund on SBC, capped at 25 UMA.',
+      },
+      'State Payroll Tax': {
+        rate: 0.03,
+        note: 'State-varying, roughly 1% to 4%. 3% is the Mexico City rate. Levied by the state, not IMSS, and uncapped.',
+      },
+      'Aguinaldo (13th month)': {
+        rate: 0.041667,
+        note: 'Federal Labour Law. Statutory minimum 15 days\' pay per year. Assumes the salary entered represents 12 monthly payments.',
+      },
+    },
+    leave: { annualDays: 12, sickDays: 0, parentalWeeks: 12 },
+    minWage: { amount: 315.04, period: 'day' },
+  },
+
+  Brazil: {
+    currency: 'BRL',
+    symbol: 'R$',
+    verified: true,
+    excludeELI: false,
+    employer: {
+      'INSS Patronal': {
+        rate: 0.2,
+        note: 'Receita Federal, 2026. 20% employer contribution on total payroll for companies under Lucro Presumido or Lucro Real. No employer-side ceiling — the ceiling applies only to the employee contribution.',
+      },
+      'RAT (Work Accident)': {
+        rate: 0.02,
+        note: '1%, 2% or 3% by CNAE activity code, then multiplied by the FAP accident-prevention factor (0.5 to 2.0) based on the employer\'s own claims history. 2% shown is the mid grade before FAP. 2026.',
+      },
+      'Sistema S & Third-party Levies': {
+        rate: 0.058,
+        note: 'Receita Federal, 2026. Combined terceiros for commerce and services: salário-educação 2.5%, SESI/SESC 1.5%, SENAI/SENAC 1.0%, SEBRAE 0.6%, INCRA 0.2%.',
+      },
+      FGTS: {
+        rate: 0.08,
+        note: 'Caixa Econômica Federal, 2026. 8% employer deposit to the employee\'s severance fund account, paid monthly.',
+      },
+      '13th Salary': {
+        rate: 0.083333,
+        note: 'Mandatory 13th salary (gratificação natalina), paid in two instalments. Assumes the salary entered represents 12 monthly payments.',
+      },
+      'Vacation Bonus (1/3)': {
+        rate: 0.027778,
+        note: 'Constitutional one-third vacation premium payable on the 30 days\' statutory leave.',
+      },
+      'Meal & Food Allowance': {
+        fixedMonthly: 600,
+        note: 'Not federally mandatory but required by most collective bargaining agreements. R$600/mo is an indicative benchmark only — replace it with the figure from the CBA that applies to the role.',
+      },
+    },
+    leave: { annualDays: 30, sickDays: 15, parentalWeeks: 17 },
+    minWage: { amount: 1621, period: 'mo' },
+  },
+
+  Chile: {
+    currency: 'CLP',
+    symbol: 'CLP$',
+    verified: true,
+    excludeELI: false,
+    employer: {
+      // Chilean ceilings are set in UF, which is inflation-indexed daily. The
+      // CLP figures below assume UF = CLP 40,300 and need reconverting
+      // periodically — see the notes.
+      'Unemployment Insurance (AFC)': {
+        rate: 0.024,
+        cap: 65334360,
+        capType: 'base',
+        note: 'Superintendencia de Pensiones, 2026. 2.4% employer share for indefinite contracts (3.0% for fixed-term). Ceiling 135.1 UF/mo from January 2026 remuneration, shown here converted at UF = CLP 40,300. Reconvert when the UF moves materially.',
+      },
+      'Employer Pension Contribution (reform)': {
+        rate: 0.035,
+        cap: 43475640,
+        capType: 'base',
+        note: 'Pension reform, at 3.5% from August 2026. This figure already includes the 2.5% Social Insurance component that funds the SIS and life-expectancy compensation, so there is no separate SIS line. Still phasing up toward 8.5%. Ceiling 89.9 UF/mo, converted at UF = CLP 40,300.',
+      },
+      'Work Accident Insurance (Mutual)': {
+        rate: 0.0093,
+        cap: 43475640,
+        capType: 'base',
+        note: 'Ley 16.744. 0.90% basic rate plus a 0.03% extraordinary levy; an activity-based surcharge of up to 3.4% applies to higher-risk work. Same 89.9 UF/mo ceiling.',
+      },
+    },
+    leave: { annualDays: 15, sickDays: 0, parentalWeeks: 30 },
+    minWage: { amount: 529000, period: 'mo' },
+  },
+
+  Colombia: {
+    currency: 'COP',
+    symbol: 'COL$',
+    verified: true,
+    excludeELI: false,
+    employer: {
+      // SMMLV 2026 = COP 1,750,905/mo. IBC ceiling 25 SMMLV = 525,271,500/yr.
+      // The Ley 1607 exemption threshold of 10 SMMLV = 210,108,600/yr.
+      'Health (EPS)': {
+        rate: 0.085,
+        appliesFrom: 210108600,
+        cap: 525271500,
+        capType: 'base',
+        note: 'Ministerio de Salud, 2026. 8.5% employer share of the 12.5% total. Exempt under Ley 1607 of 2012 for employees earning under 10 SMMLV (COP 17,509,050/mo) where the employer is a legal entity — so this line correctly shows zero below that.',
+      },
+      Pension: {
+        rate: 0.12,
+        cap: 525271500,
+        capType: 'base',
+        note: 'Colpensiones, 2026. 12% employer share of the 16% total. IBC ceiling 25 SMMLV (COP 43,772,625/mo). No exemption — payable at all salary levels.',
+      },
+      'Work Risk Insurance (ARL)': {
+        rate: 0.00522,
+        cap: 525271500,
+        capType: 'base',
+        note: '2026. Risk-class-rated from 0.522% (Class I, office work) to 6.960% (Class V). Employer-funded in full.',
+      },
+      'Caja de Compensación Familiar': {
+        rate: 0.04,
+        cap: 525271500,
+        capType: 'base',
+        note: '2026. 4% employer contribution to the family compensation fund. Unlike SENA and ICBF this is payable at all salary levels.',
+      },
+      'SENA & ICBF': {
+        rate: 0.05,
+        appliesFrom: 210108600,
+        cap: 525271500,
+        capType: 'base',
+        note: '2026. SENA 2% plus ICBF 3%. Exempt under Ley 1607 of 2012 for employees under 10 SMMLV where the employer is a legal entity, on the same basis as employer health.',
+      },
+      'Severance (Cesantías) & Interest': {
+        rate: 0.091667,
+        note: 'One month\'s salary per year of service (8.333%) plus 12% annual interest on the accrued balance (1%).',
+      },
+      'Prima de Servicios': {
+        rate: 0.083333,
+        note: 'Mandatory 13th month equivalent, paid in two instalments in June and December. Assumes the salary entered represents 12 monthly payments.',
+      },
+    },
+    leave: { annualDays: 15, sickDays: 0, parentalWeeks: 18 },
+    minWage: { amount: 1750905, period: 'mo' },
+  },
+
+  Argentina: {
+    currency: 'ARS',
+    symbol: 'AR$',
+    verified: true,
+    excludeELI: false,
+    employer: {
+      'Social Security Contributions': {
+        rate: 0.204,
+        note: 'Decreto 814/2001 as amended, 2026. 20.4% combined employer contribution to SIPA, PAMI, family allowances and the National Employment Fund, for services and commerce employers above the MiPyME sales threshold. Employers holding a valid MiPyME certificate pay 18%. No ceiling on employer contributions.',
+      },
+      'Health Insurance (Obra Social)': {
+        rate: 0.06,
+        note: '2026. 6% employer share to the union health fund. No ceiling.',
+      },
+      'Work Risk Insurance (ART)': {
+        rate: 0.015,
+        note: 'Negotiated per employer and industry. Roughly 1% to 1.5% for office work, 3% to 5% for industry and up to 8% for construction.',
+      },
+      'Aguinaldo (SAC)': {
+        rate: 0.083333,
+        note: 'Mandatory 13th month (sueldo anual complementario), paid in two instalments in June and December. Assumes the salary entered represents 12 monthly payments.',
+      },
+    },
+    leave: { annualDays: 14, sickDays: 90, parentalWeeks: 13 },
+    minWage: { amount: 322000, period: 'mo' },
+  },
+
+  /* ==========================================================================
+   * EUROPE, MIDDLE EAST & AFRICA
+   * ======================================================================== */
+
+  'United Kingdom': {
+    currency: 'GBP',
+    symbol: '£',
+    verified: true,
+    excludeELI: false,
+    employer: {
+      'Employer National Insurance (Class 1 Secondary)': {
+        rate: 0.15,
+        exempt: 5000,
+        note: 'HMRC. 15% on earnings above the £5,000/yr Secondary Threshold, from 6 Apr 2025. Rate and threshold unchanged for 2026-27 and frozen to 2030-31.',
+      },
+      'Workplace Pension (auto-enrolment minimum)': {
+        rate: 0.03,
+        exempt: 6240,
+        cap: 50270,
+        capType: 'base',
+        note: 'The Pensions Regulator. Minimum 3% employer contribution on qualifying earnings — the band from £6,240 to £50,270/yr. 2026-27 band. Many employers contribute on full salary instead, which costs more.',
+      },
+    },
+    leave: { annualDays: 28, sickDays: 0, parentalWeeks: 52 },
+    minWage: { amount: 12.71, period: 'hr' },
+  },
+
+  Ireland: {
+    currency: 'EUR',
+    symbol: '€',
+    verified: true,
+    excludeELI: false,
+    employer: {
+      'Pay-Related Social Insurance (PRSI, Class A)': {
+        tiers: [
+          { upTo: 28704, rate: 0.09 },
+          { upTo: Infinity, rate: 0.1125 },
+        ],
+        tierMode: 'whole',
+        note: 'Revenue.ie. 9.00% on weekly earnings up to €552, 11.25% above €552 — and the higher rate applies to ALL earnings, not just the excess, which is why this is a banded rather than marginal rate. Threshold annualised as €552 x 52 = €28,704. Both rates rise on 1 Oct 2026 to 9.15% / 11.40%.',
+      },
+      'My Future Fund (auto-enrolment)': {
+        rate: 0.015,
+        cap: 80000,
+        capType: 'base',
+        note: 'Ireland\'s auto-enrolment pension, live from 1 Jan 2026. Employer contributes 1.5% of gross earnings up to €80,000, rising by 1.5 points every three years to 6% by 2035. Applies to employees aged 23-60 earning over €20,000/yr who are not already in a workplace scheme.',
+      },
+    },
+    leave: { annualDays: 20, sickDays: 5, parentalWeeks: 26 },
+    minWage: { amount: 14.15, period: 'hr' },
   },
 
   Germany: {
@@ -458,7 +927,7 @@ export const countries = {
         capType: 'base',
         note: 'Contribution d\'équilibre technique, 2026. 0.21% employer share, applies to earnings up to eight PASS and only where pay exceeds one PASS.',
       },
-      'APEC': {
+      APEC: {
         rate: 0.00036,
         cap: 192240,
         capType: 'base',
@@ -493,409 +962,45 @@ export const countries = {
     minWage: { amount: 12.02, period: 'hr' },
   },
 
-  /* ==========================================================================
-   * NEEDS REVIEW — built from secondary sources and EOR simulation
-   * benchmarks. Not yet checked against the national authority. Every note
-   * in this block is prefixed UNVERIFIED.
-   * ======================================================================== */
-
-  Indonesia: {
-    currency: 'IDR',
-    symbol: 'Rp',
-    verified: false,
-    excludeELI: false,
-    employer: {
-      'BPJS Kesehatan (Health)': {
-        rate: 0.04,
-        cap: 144000000,
-        capType: 'base',
-        note: 'UNVERIFIED — needs review. 4% employer share, salary ceiling Rp 12,000,000/mo. Per Horizons simulation, 27 May 2025.',
-      },
-      'JHT (Old Age Security)': {
-        rate: 0.037,
-        note: 'UNVERIFIED — needs review. 3.7% employer share, no ceiling. Per Horizons simulation, 27 May 2025.',
-      },
-      'JP (Pension Security)': {
-        rate: 0.02,
-        cap: 120507600,
-        capType: 'base',
-        note: 'UNVERIFIED — needs review. 2% employer share, salary ceiling Rp 10,042,300/mo — this ceiling is indexed annually and the 2026 figure needs confirming. Per Horizons simulation, 27 May 2025.',
-      },
-      'JKK (Work Accident)': {
-        rate: 0.0024,
-        note: 'UNVERIFIED — needs review. 0.24% is the lowest of five risk bands (0.24%-1.74%). Per Horizons simulation, 27 May 2025.',
-      },
-      'JKM (Death)': {
-        rate: 0.003,
-        note: 'UNVERIFIED — needs review. 0.30% employer share. Per Horizons simulation, 27 May 2025.',
-      },
-      'THR (Religious Holiday Allowance)': {
-        rate: 0.083333,
-        note: 'UNVERIFIED — needs review. Mandatory one month\'s salary paid annually. Assumes the salary entered is 12 monthly payments.',
-      },
-    },
-    leave: { annualDays: 12, sickDays: 0, parentalWeeks: 13 },
-    minWage: { amount: 5400000, period: 'mo' },
-  },
-
-  Vietnam: {
-    currency: 'VND',
-    symbol: '₫',
-    verified: false,
-    excludeELI: false,
-    employer: {
-      'Social Insurance': {
-        rate: 0.175,
-        note: 'UNVERIFIED — needs review. 17.5% employer share (retirement, sickness/maternity, occupational accident). Capped at 20x the base salary.',
-      },
-      'Health Insurance': {
-        rate: 0.03,
-        note: 'UNVERIFIED — needs review. 3% employer share, capped at 20x the base salary.',
-      },
-      'Unemployment Insurance': {
-        rate: 0.01,
-        note: 'UNVERIFIED — needs review. 1% employer share, capped at 20x the regional minimum wage.',
-      },
-      'Trade Union Fee': {
-        rate: 0.02,
-        note: 'UNVERIFIED — needs review. 2% employer contribution to the trade union fund.',
-      },
-    },
-    leave: { annualDays: 12, sickDays: 30, parentalWeeks: 26 },
-    minWage: { amount: 4960000, period: 'mo' },
-  },
-
-  Thailand: {
-    currency: 'THB',
-    symbol: '฿',
-    verified: false,
-    excludeELI: false,
-    employer: {
-      'Social Security Fund': {
-        rate: 0.05,
-        cap: 180000,
-        capType: 'base',
-        note: 'UNVERIFIED — needs review. 5% employer share, wage ceiling THB 15,000/mo — caps at THB 750/mo. A rise in the ceiling has been under discussion; confirm the 2026 position.',
-      },
-      "Workmen's Compensation Fund": {
-        rate: 0.002,
-        cap: 240000,
-        capType: 'base',
-        note: 'UNVERIFIED — needs review. 0.2%-1.0% by industry risk; 0.2% is the lowest band. Wage ceiling THB 20,000/mo.',
-      },
-    },
-    leave: { annualDays: 6, sickDays: 30, parentalWeeks: 14 },
-    minWage: { amount: 400, period: 'day' },
-  },
-
-  'Hong Kong': {
-    currency: 'HKD',
-    symbol: 'HK$',
-    verified: false,
-    excludeELI: false,
-    employer: {
-      'MPF (Mandatory Provident Fund)': {
-        rate: 0.05,
-        cap: 360000,
-        capType: 'base',
-        note: 'UNVERIFIED — needs review. 5% employer contribution, relevant income ceiling HK$30,000/mo — caps at HK$1,500/mo.',
-      },
-    },
-    leave: { annualDays: 7, sickDays: 12, parentalWeeks: 14 },
-    minWage: { amount: 42.1, period: 'hr' },
-  },
-
-  Japan: {
-    currency: 'JPY',
-    symbol: '¥',
-    verified: false,
-    excludeELI: false,
-    employer: {
-      'Employees Pension Insurance': {
-        rate: 0.0915,
-        cap: 7860000,
-        capType: 'base',
-        note: 'UNVERIFIED — needs review. 18.3% split evenly; employer share 9.15%. Standard monthly remuneration capped at ¥650,000.',
-      },
-      'Health Insurance': {
-        rate: 0.0499,
-        cap: 16860000,
-        capType: 'base',
-        note: 'UNVERIFIED — needs review. Roughly 9.98% split evenly; rate varies by prefecture and by health insurance society. Standard monthly remuneration capped at ¥1,405,000.',
-      },
-      'Long-term Care Insurance': {
-        rate: 0.008,
-        cap: 16860000,
-        capType: 'base',
-        note: 'UNVERIFIED — needs review. Employer share for employees aged 40-64 only.',
-      },
-      'Employment Insurance': {
-        rate: 0.009,
-        note: 'UNVERIFIED — needs review. Employer share for general businesses; rates are revised each April.',
-      },
-      "Workers' Accident Compensation": {
-        rate: 0.003,
-        note: 'UNVERIFIED — needs review. Industry-rated from 0.25% to 8.8%; 0.3% is the office-work band.',
-      },
-    },
-    leave: { annualDays: 10, sickDays: 0, parentalWeeks: 58 },
-    minWage: { amount: 1121, period: 'hr' },
-  },
-
-  'South Korea': {
-    currency: 'KRW',
-    symbol: '₩',
-    verified: false,
-    excludeELI: false,
-    employer: {
-      'National Pension': {
-        rate: 0.045,
-        cap: 75720000,
-        capType: 'base',
-        note: 'UNVERIFIED — needs review. 9% split evenly; employer share 4.5%. Monthly income ceiling around KRW 6,310,000 — confirm the 2026 figure, it is reset each July.',
-      },
-      'National Health Insurance': {
-        rate: 0.03595,
-        note: 'UNVERIFIED — needs review. 7.09% split evenly; employer share roughly 3.545%. Confirm the 2026 rate.',
-      },
-      'Long-term Care Insurance': {
-        rate: 0.00459,
-        note: 'UNVERIFIED — needs review. Levied as a percentage of the health insurance contribution, expressed here as an effective rate on salary.',
-      },
-      'Employment Insurance': {
-        rate: 0.0115,
-        note: 'UNVERIFIED — needs review. 1.15% employer share for employers under 150 staff; higher for larger employers.',
-      },
-      'Industrial Accident Insurance': {
-        rate: 0.007,
-        note: 'UNVERIFIED — needs review. Industry-rated; 0.7% is the office-work band.',
-      },
-    },
-    leave: { annualDays: 15, sickDays: 0, parentalWeeks: 52 },
-    minWage: { amount: 10320, period: 'hr' },
-  },
-
-  Taiwan: {
-    currency: 'TWD',
-    symbol: 'NT$',
-    verified: false,
-    excludeELI: false,
-    employer: {
-      'Labor Insurance': {
-        rate: 0.0871,
-        cap: 528000,
-        capType: 'base',
-        note: 'UNVERIFIED — needs review. Employer bears 70% of the 12.5% total (including employment insurance). Insured salary ceiling around NT$45,800/mo.',
-      },
-      'National Health Insurance': {
-        rate: 0.0517,
-        cap: 2652000,
-        capType: 'base',
-        note: 'UNVERIFIED — needs review. 5.17% rate; employer bears 60% with an average dependant multiplier applied. Ceiling around NT$219,500/mo.',
-      },
-      'Labor Pension': {
-        rate: 0.06,
-        cap: 2160000,
-        capType: 'base',
-        note: 'UNVERIFIED — needs review. 6% mandatory employer contribution to the individual pension account. Ceiling around NT$180,000/mo.',
-      },
-    },
-    leave: { annualDays: 7, sickDays: 30, parentalWeeks: 8 },
-    minWage: { amount: 28590, period: 'mo' },
-  },
-
-  Mexico: {
-    currency: 'MXN',
-    symbol: 'MX$',
-    verified: false,
-    excludeELI: false,
-    employer: {
-      'IMSS (Social Security)': {
-        rate: 0.2,
-        note: 'UNVERIFIED — needs review. Blended employer IMSS burden across sickness/maternity, disability, retirement and nursery branches. The real calculation is a stack of separate rates on differing UMA-based bands and needs modelling properly before client use.',
-      },
-      'INFONAVIT (Housing)': {
-        rate: 0.05,
-        note: 'UNVERIFIED — needs review. 5% employer contribution to the housing fund.',
-      },
-      'SAR (Retirement)': {
-        rate: 0.02,
-        note: 'UNVERIFIED — needs review. 2% employer contribution.',
-      },
-      'State Payroll Tax': {
-        rate: 0.03,
-        note: 'UNVERIFIED — needs review. State-varying, roughly 1%-4%. 3% is the common Mexico City rate.',
-      },
-      'Aguinaldo (13th month)': {
-        rate: 0.041667,
-        note: 'UNVERIFIED — needs review. Statutory minimum 15 days\' pay per year. Assumes the salary entered is 12 monthly payments.',
-      },
-    },
-    leave: { annualDays: 12, sickDays: 0, parentalWeeks: 12 },
-    minWage: { amount: 278.8, period: 'day' },
-  },
-
-  Brazil: {
-    currency: 'BRL',
-    symbol: 'R$',
-    verified: false,
-    excludeELI: false,
-    employer: {
-      'INSS (Social Security)': {
-        rate: 0.2,
-        note: 'UNVERIFIED — needs review. 20% employer contribution on total payroll, no ceiling on the employer side.',
-      },
-      'RAT (Work Accident)': {
-        rate: 0.02,
-        note: 'UNVERIFIED — needs review. 1%-3% by risk grade, adjusted by the FAP multiplier (0.5-2.0).',
-      },
-      'Sistema S & Third-party Levies': {
-        rate: 0.058,
-        note: 'UNVERIFIED — needs review. Combined SESI/SENAI/SEBRAE/INCRA/salário-educação levies, typically 5.8%.',
-      },
-      'FGTS': {
-        rate: 0.08,
-        note: 'UNVERIFIED — needs review. 8% employer deposit to the severance fund.',
-      },
-      '13th Salary': {
-        rate: 0.083333,
-        note: 'UNVERIFIED — needs review. Mandatory 13th salary. Assumes the salary entered is 12 monthly payments.',
-      },
-      'Vacation Bonus (1/3)': {
-        rate: 0.0278,
-        note: 'UNVERIFIED — needs review. Constitutional one-third vacation premium on 30 days\' leave.',
-      },
-      'Meal & Food Allowance': {
-        fixedMonthly: 600,
-        note: 'UNVERIFIED — needs review. Not federally mandatory but required by most collective bargaining agreements. R$600/mo is an indicative benchmark; the actual figure comes from the applicable CBA. This is a placeholder — replace it with the CBA figure for the role.',
-      },
-    },
-    leave: { annualDays: 30, sickDays: 15, parentalWeeks: 17 },
-    minWage: { amount: 1621, period: 'mo' },
-  },
-
-  Chile: {
-    currency: 'CLP',
-    symbol: 'CLP$',
-    verified: false,
-    excludeELI: false,
-    employer: {
-      'Unemployment Insurance (AFC)': {
-        rate: 0.024,
-        note: 'UNVERIFIED — needs review. 2.4% employer share for indefinite contracts, capped at roughly 131.9 UF.',
-      },
-      'Work Accident Insurance (Mutual)': {
-        rate: 0.0093,
-        note: 'UNVERIFIED — needs review. 0.93% base rate plus an activity-based surcharge up to 3.4%.',
-      },
-      'SIS (Disability & Survivorship)': {
-        rate: 0.0188,
-        note: 'UNVERIFIED — needs review. Employer-funded, rate reset periodically by tender.',
-      },
-      'Heavy Labour / Social Security Reform Levy': {
-        rate: 0.01,
-        note: 'UNVERIFIED — needs review. The 2025 pension reform phases in an additional employer contribution rising to 8.5% over several years. The 2026 step needs confirming — this figure is a placeholder.',
-      },
-    },
-    leave: { annualDays: 15, sickDays: 0, parentalWeeks: 30 },
-    minWage: { amount: 529000, period: 'mo' },
-  },
-
-  Colombia: {
-    currency: 'COP',
-    symbol: 'COL$',
-    verified: false,
-    excludeELI: false,
-    employer: {
-      'Health (EPS)': {
-        rate: 0.085,
-        note: 'UNVERIFIED — needs review. 8.5% employer share. Exempt for employees earning under 10 minimum wages in some structures.',
-      },
-      'Pension': {
-        rate: 0.12,
-        note: 'UNVERIFIED — needs review. 12% employer share of the 16% total.',
-      },
-      'Work Risk Insurance (ARL)': {
-        rate: 0.00522,
-        note: 'UNVERIFIED — needs review. Risk-class-rated, 0.522% (class I) to 6.96% (class V).',
-      },
-      'Parafiscal (SENA, ICBF, Caja)': {
-        rate: 0.09,
-        note: 'UNVERIFIED — needs review. 4% Caja de Compensación plus 3% ICBF plus 2% SENA; the latter two are exempt for employees under 10 minimum wages.',
-      },
-      'Severance (Cesantías) & Interest': {
-        rate: 0.0917,
-        note: 'UNVERIFIED — needs review. One month\'s salary per year plus 12% annual interest on the balance.',
-      },
-      'Prima de Servicios': {
-        rate: 0.083333,
-        note: 'UNVERIFIED — needs review. Mandatory 13th month equivalent, paid in two instalments.',
-      },
-    },
-    leave: { annualDays: 15, sickDays: 0, parentalWeeks: 18 },
-    minWage: { amount: 1623500, period: 'mo' },
-  },
-
-  Argentina: {
-    currency: 'ARS',
-    symbol: 'AR$',
-    verified: false,
-    excludeELI: false,
-    employer: {
-      'Social Security Contributions': {
-        rate: 0.207,
-        note: 'UNVERIFIED — needs review. Combined employer contribution for pension, PAMI, family allowances and unemployment fund. 20.7% applies to services employers above the revenue threshold; 18% otherwise.',
-      },
-      'Health Insurance (Obra Social)': {
-        rate: 0.06,
-        note: 'UNVERIFIED — needs review. 6% employer share to the union health fund.',
-      },
-      'Work Risk Insurance (ART)': {
-        rate: 0.03,
-        note: 'UNVERIFIED — needs review. Negotiated per employer and industry, commonly 2%-6%.',
-      },
-      'Aguinaldo (SAC)': {
-        rate: 0.083333,
-        note: 'UNVERIFIED — needs review. Mandatory 13th month, paid in two instalments.',
-      },
-    },
-    leave: { annualDays: 14, sickDays: 90, parentalWeeks: 13 },
-    minWage: { amount: 322000, period: 'mo' },
-  },
-
   Netherlands: {
     currency: 'EUR',
     symbol: '€',
-    verified: false,
+    verified: true,
     excludeELI: false,
     employer: {
-      'WW / AWf (Unemployment)': {
+      'AWf (Unemployment, low rate)': {
         rate: 0.0274,
-        cap: 79000,
+        cap: 79409,
         capType: 'base',
-        note: 'UNVERIFIED — needs review. Low rate for permanent written contracts; the high rate for flexible contracts is 5 points more. Confirm the 2026 rate and the maximum contribution wage.',
+        note: 'Definitive 2026 premium percentages. 2.74% low rate, which requires a written indefinite contract with no on-call clause. The high rate for flexible contracts is 7.74% — five points more. Maximum premium wage €79,409.',
       },
-      'WIA / Aof (Disability)': {
-        rate: 0.0764,
-        cap: 79000,
+      'Aof (Disability)': {
+        rate: 0.0763,
+        cap: 79409,
         capType: 'base',
-        note: 'UNVERIFIED — needs review. Higher rate applies to large employers; small employers pay a reduced rate.',
+        note: 'Definitive 2026 premium percentages. 7.63% high rate for large employers; small employers pay the reduced 6.27% rate. Maximum premium wage €79,409.',
       },
       'Zvw (Health Insurance Act)': {
-        rate: 0.0626,
-        cap: 79000,
+        rate: 0.061,
+        cap: 79409,
         capType: 'base',
-        note: 'UNVERIFIED — needs review. Employer levy on wages up to the maximum contribution wage.',
+        note: 'Definitive 2026 premium percentages. Employer levy fell 0.41 points to 6.10% for 2026. Maximum premium wage €79,409.',
       },
       'Whk (Return to Work Fund)': {
-        rate: 0.0121,
-        cap: 79000,
+        rate: 0.0152,
+        cap: 79409,
         capType: 'base',
-        note: 'UNVERIFIED — needs review. Differentiated per employer based on claims history.',
+        note: '2026 averages: WGA 0.96% (up from 0.83%) plus ZW-flex 0.56% (up from 0.50%). Differentiated per employer based on claims history, so your actual rate will differ.',
+      },
+      'Childcare Surcharge': {
+        rate: 0.005,
+        cap: 79409,
+        capType: 'base',
+        note: '2026. 0.50% surcharge on the premium wage.',
       },
       'Holiday Allowance': {
         rate: 0.08,
-        note: 'UNVERIFIED — needs review. Statutory 8% holiday allowance, usually paid in May. Assumes the salary entered excludes it.',
+        note: 'Statutory 8% holiday allowance (vakantiegeld), normally paid in May. Assumes the salary entered excludes it.',
       },
     },
     leave: { annualDays: 20, sickDays: 104, parentalWeeks: 16 },
@@ -905,44 +1010,51 @@ export const countries = {
   Spain: {
     currency: 'EUR',
     symbol: '€',
-    verified: false,
+    verified: true,
     excludeELI: false,
     employer: {
+      // Orden PJC/297/2026 (BOE 31 Mar 2026). Base máxima €5,101.20/mo =
+      // €61,214.40/yr, applied to every capped line below.
       'Social Security (Common Contingencies)': {
         rate: 0.236,
-        cap: 59059,
+        cap: 61214.4,
         capType: 'base',
-        note: 'UNVERIFIED — needs review. 23.6% employer share. Contribution base ceiling around €4,921/mo — confirm the 2026 figure, it is reset annually.',
+        note: 'Orden PJC/297/2026. 23.60% employer share of the 28.30% total. Maximum contribution base €5,101.20/mo (€61,214.40/yr) from 1 Jan 2026.',
       },
-      'Unemployment': {
+      Unemployment: {
         rate: 0.055,
-        cap: 59059,
+        cap: 61214.4,
         capType: 'base',
-        note: 'UNVERIFIED — needs review. 5.5% employer share for indefinite contracts; 6.7% for temporary.',
+        note: 'Orden PJC/297/2026. 5.50% employer share for indefinite contracts (7.05% total). Fixed-term contracts attract 6.70% employer.',
       },
-      'FOGASA': {
+      FOGASA: {
         rate: 0.002,
-        cap: 59059,
+        cap: 61214.4,
         capType: 'base',
-        note: 'UNVERIFIED — needs review. 0.2% wage guarantee fund.',
+        note: 'Orden PJC/297/2026. 0.20% wage guarantee fund, employer-only.',
       },
       'Professional Training': {
         rate: 0.006,
-        cap: 59059,
+        cap: 61214.4,
         capType: 'base',
-        note: 'UNVERIFIED — needs review. 0.6% employer share.',
+        note: 'Orden PJC/297/2026. 0.60% employer share of the 0.70% total.',
       },
       'MEI (Intergenerational Equity Mechanism)': {
-        rate: 0.0067,
-        cap: 59059,
+        rate: 0.0075,
+        cap: 61214.4,
         capType: 'base',
-        note: 'UNVERIFIED — needs review. Employer share of the MEI levy, which steps up annually to 2029.',
+        note: 'Orden PJC/297/2026. MEI rose to 0.90% for 2026 — 0.75% employer, 0.15% employee. Steps up annually to 2029.',
       },
       'Work Accident (AT/EP)': {
         rate: 0.015,
-        cap: 59059,
+        cap: 61214.4,
         capType: 'base',
-        note: 'UNVERIFIED — needs review. Activity-rated; 1.5% is the office-work band.',
+        note: 'Orden PJC/297/2026. Activity-rated; 1.50% is the office-work band.',
+      },
+      'Solidarity Contribution (high earners)': {
+        rate: 0.0096,
+        exempt: 61214.4,
+        note: 'Orden PJC/297/2026. Additional levy on the portion of salary ABOVE the maximum contribution base, at 1.15% rising to 1.46% across higher excess bands. 0.96% shown is the employer\'s 83.39% share of the 1.15% first band. Zero for salaries at or below €61,214.40.',
       },
     },
     leave: { annualDays: 22, sickDays: 0, parentalWeeks: 16 },
@@ -952,28 +1064,28 @@ export const countries = {
   Portugal: {
     currency: 'EUR',
     symbol: '€',
-    verified: false,
+    verified: true,
     excludeELI: false,
     employer: {
       'Social Security (Segurança Social)': {
         rate: 0.2375,
-        note: 'UNVERIFIED — needs review. 23.75% employer share, no ceiling.',
+        note: 'Taxa Social Única, 2026. 23.75% employer share of the 34.75% global rate. No ceiling. Non-profit employers pay 22.30%.',
       },
-      'Wage Guarantee Fund (FGCT/FCT)': {
+      'Labour Compensation Fund (FCT/FGCT)': {
         rate: 0.01,
-        note: 'UNVERIFIED — needs review. 1% employer contribution to the labour compensation funds.',
+        note: '2026. 1% employer contribution to the labour compensation funds, which part-fund statutory severance.',
       },
       'Work Accident Insurance': {
         rate: 0.0125,
-        note: 'UNVERIFIED — needs review. Mandatory private cover, roughly 1%-2% depending on risk.',
+        note: 'Mandatory private cover. Roughly 1% to 2% depending on occupational risk; 1.25% is the office-work band.',
       },
       '13th & 14th Month': {
         rate: 0.166667,
-        note: 'UNVERIFIED — needs review. Mandatory holiday and Christmas subsidies, each one month. Assumes the salary entered is 12 monthly payments.',
+        note: 'Mandatory holiday and Christmas subsidies, each one month\'s pay. Assumes the salary entered represents 12 monthly payments.',
       },
       'Meal Allowance': {
         fixedMonthly: 132,
-        note: 'UNVERIFIED — needs review. €6/working day for 22 days, the common tax-exempt card rate. Not statutory for all employers but near-universal in practice.',
+        note: '€6/working day across 22 days, the common tax-exempt meal card rate. Not statutory for all employers but near-universal in practice.',
       },
     },
     leave: { annualDays: 22, sickDays: 0, parentalWeeks: 17 },
@@ -988,19 +1100,21 @@ export const countries = {
     employer: {
       'INPS (Social Security)': {
         rate: 0.2981,
-        note: 'UNVERIFIED — needs review. Roughly 29.81% employer share for commercial-sector employees; varies materially by sector, company size and employee category. The pension component is capped at around €120,000/yr for post-1996 entrants.',
+        cap: 122295,
+        capType: 'base',
+        note: 'UNVERIFIED — needs review. This is the one country in the file I could not pin to a single authoritative rate. INPS publishes employer contributions per sector, company size and employee category rather than as one headline figure; credible sources put the commercial-sector employer burden anywhere between 29% and 32%. 29.81% is a commonly quoted commercio figure. The €122,295 ceiling is the 2026 massimale contributivo for employees first registered from 1 Jan 1996 — those with pre-1996 seniority face a €93,707 ceiling instead, and the ceiling applies only to the IVS pension component, not the whole contribution. Get this confirmed by an Italian payroll provider before client use.',
       },
       'INAIL (Work Accident)': {
-        rate: 0.005,
-        note: 'UNVERIFIED — needs review. Activity-rated from 0.4% to 13%; 0.5% is the office-work band.',
+        rate: 0.004,
+        note: 'UNVERIFIED — needs review. INAIL rates run 4‰ to 100‰ by occupational risk. 4‰ (0.4%) is the administrative-employee band; commercial workers sit around 8‰.',
       },
       'TFR (Severance Accrual)': {
         rate: 0.069,
-        note: 'UNVERIFIED — needs review. Trattamento di Fine Rapporto accrues at 1/13.5 of annual pay, roughly 7.41%, less a 0.5% INPS transfer.',
+        note: 'UNVERIFIED — needs review. Trattamento di Fine Rapporto accrues at 1/13.5 of annual pay (roughly 7.41%) less a 0.50% INPS transfer.',
       },
       '13th & 14th Month': {
         rate: 0.166667,
-        note: 'UNVERIFIED — needs review. 13th month is universal; the 14th depends on the applicable CCNL. Assumes the salary entered is 12 monthly payments.',
+        note: 'UNVERIFIED — needs review. The 13th month is universal; the 14th depends on the applicable CCNL, so this line may overstate by half. Assumes the salary entered represents 12 monthly payments.',
       },
     },
     leave: { annualDays: 20, sickDays: 180, parentalWeeks: 21 },
@@ -1010,32 +1124,32 @@ export const countries = {
   Poland: {
     currency: 'PLN',
     symbol: 'zł',
-    verified: false,
+    verified: true,
     excludeELI: false,
     employer: {
       'Pension (Emerytalne)': {
         rate: 0.0976,
-        cap: 260190,
+        cap: 282600,
         capType: 'base',
-        note: 'UNVERIFIED — needs review. 9.76% employer share, capped at 30x the average forecast salary. Confirm the 2026 cap.',
+        note: 'ZUS, 2026. 9.76% employer share of the 19.52% total. Capped by the 30-krotność annual limit, PLN 282,600 for 2026 (up from PLN 260,190).',
       },
       'Disability (Rentowe)': {
         rate: 0.065,
-        cap: 260190,
+        cap: 282600,
         capType: 'base',
-        note: 'UNVERIFIED — needs review. 6.5% employer share, same annual cap.',
+        note: 'ZUS, 2026. 6.50% employer share of the 8.00% total. Same PLN 282,600 annual cap.',
       },
       'Accident (Wypadkowe)': {
         rate: 0.0167,
-        note: 'UNVERIFIED — needs review. 0.67%-3.33% by activity; 1.67% is the default for most employers.',
+        note: 'ZUS, 2026. Employer-only, risk-rated 0.67% to 3.33%. 1.67% is the default rate for most employers. Uncapped.',
       },
       'Labour Fund & FGŚP': {
         rate: 0.0255,
-        note: 'UNVERIFIED — needs review. 2.45% Labour Fund plus 0.10% guaranteed benefits fund.',
+        note: 'ZUS, 2026. Labour Fund 2.45% plus Guaranteed Employee Benefits Fund 0.10%. Employer-only, uncapped.',
       },
       'PPK (Employee Capital Plans)': {
         rate: 0.015,
-        note: 'UNVERIFIED — needs review. 1.5% employer contribution; employees may opt out.',
+        note: '2026. 1.5% minimum employer contribution to the auto-enrolment capital plan. Employees may opt out, in which case this falls away.',
       },
     },
     leave: { annualDays: 20, sickDays: 33, parentalWeeks: 20 },
@@ -1045,16 +1159,20 @@ export const countries = {
   Sweden: {
     currency: 'SEK',
     symbol: 'kr',
-    verified: false,
+    verified: true,
     excludeELI: false,
     employer: {
       'Employer Social Fees (Arbetsgivaravgifter)': {
         rate: 0.3142,
-        note: 'UNVERIFIED — needs review. 31.42% statutory employer contribution, no ceiling. Reduced rates apply to employees born before 1959 and to young workers.',
+        note: 'Skatteverket, 2026. 31.42% statutory employer contribution, unchanged since 2009 and uncapped. A reduced 20.81% rate applies to employees aged 18-23 on wages up to SEK 25,000/mo from 1 Apr 2026.',
       },
-      'Occupational Pension (ITP)': {
-        rate: 0.045,
-        note: 'UNVERIFIED — needs review. Not statutory but required by most collective agreements: 4.5% up to 7.5 income base amounts and 30% above.',
+      'Occupational Pension (ITP1)': {
+        tiers: [
+          { upTo: 616500, rate: 0.045 },
+          { upTo: Infinity, rate: 0.3 },
+        ],
+        tierMode: 'marginal',
+        note: 'Not statutory but required by most collective agreements. 4.5% up to 7.5 income base amounts (roughly SEK 616,500/yr for 2026) and 30% above — genuinely marginal, and the 30% band makes senior hires far more expensive than the headline suggests. Delete this line if no collective agreement applies.',
       },
     },
     leave: { annualDays: 25, sickDays: 14, parentalWeeks: 68 },
@@ -1064,22 +1182,22 @@ export const countries = {
   'United Arab Emirates': {
     currency: 'AED',
     symbol: 'AED',
-    verified: false,
+    verified: true,
     excludeELI: false,
     employer: {
-      'GPSSA Pension (UAE/GCC nationals only)': {
-        rate: 0.125,
+      'GPSSA Pension (Emirati nationals only)': {
+        rate: 0.15,
         cap: 840000,
         capType: 'base',
-        note: 'UNVERIFIED — needs review. 12.5% employer contribution for Emirati nationals only (15% for those who joined from Oct 2023). Expatriate employees attract no pension contribution — set this to zero for expat hires, which is the majority of EOR placements.',
+        note: 'GPSSA under the 2023 pension law. 15% employer contribution for Emirati nationals in the private sector, of a 26% total. Contribution salary cap AED 70,000/mo (raised from AED 50,000 under the 1999 law), annualised to AED 840,000. The government pays 2.5 points of the employer share where pensionable salary is under AED 20,000/mo. EXPATRIATE EMPLOYEES ATTRACT NO PENSION CONTRIBUTION — zero this line for expat hires, which is most EOR placements.',
       },
       'End of Service Gratuity': {
         rate: 0.0583,
-        note: 'UNVERIFIED — needs review. 21 days\' basic pay per year for the first five years. Accrual convention, assumes basic = 100% of the figure entered.',
+        note: 'UAE Labour Law. 21 days\' basic pay per year for the first five years, 30 days thereafter. 5.83% is the annual accrual convention and assumes basic pay equals the figure entered; where basic is a fraction of total pay the real cost is lower.',
       },
       'Medical Insurance': {
         fixedMonthly: 300,
-        note: 'UNVERIFIED — needs review. Mandatory employer-provided cover. AED 300/mo is an indicative basic-plan benchmark; actual premiums vary widely by emirate and plan.',
+        note: 'Mandatory employer-provided cover in Dubai and Abu Dhabi. AED 300/mo is an indicative basic-plan benchmark only — premiums vary widely by emirate, plan and employee age.',
       },
     },
     leave: { annualDays: 30, sickDays: 90, parentalWeeks: 8 },
@@ -1089,24 +1207,24 @@ export const countries = {
   'Saudi Arabia': {
     currency: 'SAR',
     symbol: 'SAR',
-    verified: false,
+    verified: true,
     excludeELI: false,
     employer: {
       'GOSI (Saudi nationals)': {
         rate: 0.1175,
         cap: 540000,
         capType: 'base',
-        note: 'UNVERIFIED — needs review. For Saudi nationals: 9% pension plus 0.75% unemployment (SANED) plus 2% occupational hazards. Ceiling SAR 45,000/mo. The 2024 reform phases the pension rate up for new entrants.',
+        note: 'GOSI, 2026. For Saudi nationals registered before 3 Jul 2024: 9% pension plus 2% occupational hazards plus 0.75% SANED unemployment = 11.75% employer. Those registered after that date move to 12.75% employer from July 2026 under the phased reform. Wage ceiling SAR 45,000/mo (SAR 540,000/yr).',
       },
       'GOSI (expatriates)': {
         rate: 0.02,
         cap: 540000,
         capType: 'base',
-        note: 'UNVERIFIED — needs review. Expatriate employees attract only the 2% occupational hazards branch. If hiring an expat, zero out the line above and keep this one.',
+        note: 'GOSI, 2026. Expatriate employees attract only the 2% occupational hazards branch — no pension, no unemployment. If the hire is an expat, zero out the Saudi-nationals line above and keep this one. They are mutually exclusive.',
       },
       'End of Service Award': {
         rate: 0.0556,
-        note: 'UNVERIFIED — needs review. Half a month\'s pay per year for the first five years. Accrual convention.',
+        note: 'Saudi Labour Law. Half a month\'s pay per year for the first five years, one month thereafter. 5.56% is the annual accrual convention.',
       },
     },
     leave: { annualDays: 21, sickDays: 120, parentalWeeks: 12 },
@@ -1116,24 +1234,24 @@ export const countries = {
   'South Africa': {
     currency: 'ZAR',
     symbol: 'R',
-    verified: false,
+    verified: true,
     excludeELI: false,
     employer: {
       'UIF (Unemployment Insurance Fund)': {
         rate: 0.01,
         cap: 212544,
         capType: 'base',
-        note: 'UNVERIFIED — needs review. 1% employer contribution, remuneration ceiling R17,712/mo. Confirm the 2026/27 ceiling.',
+        note: 'Department of Employment and Labour, 2026. 1% employer contribution matching the 1% employee deduction. Remuneration ceiling R17,712/mo (R212,544/yr), so the employer contribution caps at R177.12/mo.',
       },
       'SDL (Skills Development Levy)': {
         rate: 0.01,
-        note: 'UNVERIFIED — needs review. 1% of total payroll, payable where annual payroll exceeds R500,000.',
+        note: 'SARS, 2026. 1% of total payroll, payable only where the employer\'s annual payroll exceeds R500,000. Uncapped per employee.',
       },
       'COIDA (Compensation Fund)': {
         rate: 0.0104,
-        cap: 654632,
+        cap: 668000,
         capType: 'base',
-        note: 'UNVERIFIED — needs review. Industry-rated; 1.04% is a mid-band figure. Earnings ceiling confirmed annually.',
+        note: 'Compensation Fund. Industry-rated; 1.04% is a mid-band figure for office work. Annual earnings ceiling raised to R668,000 per employee from 1 Mar 2026.',
       },
     },
     leave: { annualDays: 15, sickDays: 30, parentalWeeks: 17 },

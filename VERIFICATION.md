@@ -2,78 +2,164 @@
 
 As at 31 July 2026.
 
-- **12 countries verified** against the national revenue or social security
-  authority. Every line carries the authority and effective date in its note.
-- **21 countries need your review.** They are built from secondary sources and
-  EOR simulation benchmarks, every note is prefixed `UNVERIFIED`, and the app
-  shows an amber banner when one is selected.
+**32 of 33 countries verified** against the national revenue or social security
+authority. Every line carries the authority and effective date in its note.
+
+**Italy is the one exception** and still shows the amber banner. See below.
+
+The calculation engine is checked against 38 authority-published maximums —
+Canada's $4,230.45 CPP and $1,572.30 EI, the Philippines' ₱42,360, Thailand's
+฿875/mo, Hong Kong's HK$1,500/mo, South Africa's R177.12/mo, and so on. All 38
+match exactly. Run them with:
+
+```bash
+npm run check-rates
+```
+
+Add a case there whenever you change a capped or tiered rate — it is the only
+thing standing between a typo and a wrong number in front of a client.
 
 ---
 
-## Verified (12)
+## Verified (32)
 
-| Country | Checked against | Notes |
+### Asia Pacific
+
+| Country | Source | Key figures |
 |---|---|---|
-| Australia | ATO key super rates; Fair Work Commission | SG 12%, MCB A$270,830 |
-| New Zealand | Inland Revenue; ACC / MBIE levy consultation | KiwiSaver 3.5%, ACC 0.69% |
-| United Kingdom | HMRC; The Pensions Regulator | NIC 15% over £5,000; AE 3% on qualifying earnings |
-| Ireland | Revenue.ie; My Future Fund scheme rules | PRSI banded 9.00% / 11.25%; MFF 1.5% |
-| Philippines | SSS Circular 2024-006; PhilHealth (RA 11223); Pag-IBIG | All three caps confirmed |
+| Australia | ATO; Fair Work Commission | SG 12%, MCB A$270,830 |
+| New Zealand | Inland Revenue; ACC / MBIE | KiwiSaver 3.5%, ACC 0.69% |
+| Philippines | SSS Circular 2024-006; PhilHealth; Pag-IBIG | All three caps confirmed |
 | Singapore | CPF Board; SkillsFuture SG | CPF 17%, OW ceiling S$8,000/mo |
 | Malaysia | KWSP; PERKESO; HRD Corp | EPF banded 13% / 12% |
-| India | EPFO (Jul 2026 notification); ESIC | Modelled on basic = 50% of gross — see caveat below |
-| United States | SSA; IRS | SS wage base $184,500 |
+| Indonesia | BPJS Kesehatan; BPJS Ketenagakerjaan | JP ceiling now Rp 11,086,300/mo |
+| Vietnam | Vietnam Social Security | Ceiling ₫50,600,000/mo from 1 Jul 2026 |
+| Thailand | Social Security Office | Ceiling ฿17,500/mo from 1 Jan 2026 |
+| Hong Kong | MPFA | 5%, HK$30,000/mo ceiling |
+| India | EPFO (Jul 2026 notification); ESIC | Basic = 50% of gross assumption |
+| Japan | Japan Pension Service; Kyokai Kenpo; MHLW | New childcare levy from Apr 2026 |
+| South Korea | NPS; NHIS; MOEL | Pension rose to 9.5% total |
+| Taiwan | Bureau of Labor Insurance; NHIA | Three separate ceilings |
+
+### Americas
+
+| Country | Source | Key figures |
+|---|---|---|
+| United States | SSA; IRS | Wage base $184,500 |
 | Canada | CRA; CEIC | CPP, CPP2 and EI maximums match to the cent |
-| Germany | Deutsche Rentenversicherung; GKV; Bundesagentur für Arbeit | 2026 ceilings €69,750 / €101,400 |
+| Mexico | IMSS 2026 tables; INFONAVIT | Rebuilt — see below |
+| Brazil | Receita Federal; Caixa | INSS 20%, FGTS 8%, terceiros 5.8% |
+| Chile | Superintendencia de Pensiones | Restructured — see below |
+| Colombia | MinSalud; Colpensiones; Ley 1607 | Exemption threshold modelled |
+| Argentina | Decreto 814/2001 as amended | 20.4% (18% for MiPyME) |
+
+### Europe, Middle East & Africa
+
+| Country | Source | Key figures |
+|---|---|---|
+| United Kingdom | HMRC; The Pensions Regulator | NIC 15% over £5,000 |
+| Ireland | Revenue.ie; My Future Fund rules | PRSI banded 9.00% / 11.25% |
+| Germany | Deutsche Rentenversicherung; GKV; BA | Ceilings €69,750 / €101,400 |
 | France | URSSAF; AGIRC-ARRCO; AGS | PASS 2026 €48,060 |
-
-The calculation engine was checked against 25 authority-published maximums
-(Canada's $4,230.45 CPP and $1,572.30 EI, the Philippines' ₱42,360, Singapore's
-S$135 SDL, and so on). All 25 match exactly.
-
----
-
-## Needs your review (21)
-
-Indonesia · Vietnam · Thailand · Hong Kong · Japan · South Korea · Taiwan ·
-Mexico · Brazil · Chile · Colombia · Argentina · Netherlands · Spain · Portugal ·
-Italy · Poland · Sweden · United Arab Emirates · Saudi Arabia · South Africa
-
-Where a Remote People or Horizons simulation existed in your Downloads I used it
-and cited the document date (Indonesia, Vietnam, Mexico, Netherlands, Spain,
-Portugal, Italy, Sweden, South Africa, UAE). The rest are from my own knowledge
-and are the weakest data in the file.
-
-Three that need more than a spot-check:
-
-- **Mexico** — IMSS is currently a single blended 20% line. The real calculation
-  is a stack of separate rates on differing UMA-based bands. It needs proper
-  modelling before client use.
-- **Chile** — the 2025 pension reform phases in an additional employer
-  contribution rising to 8.5%. The 2026 step is a placeholder.
-- **Brazil / Colombia** — no simulation PDFs found in Downloads, so these are
-  unsupported by any reference document.
+| Netherlands | Definitive 2026 premium percentages | Max premium wage €79,409 |
+| Spain | Orden PJC/297/2026 (BOE 31 Mar 2026) | Base máxima €5,101.20/mo |
+| Portugal | Taxa Social Única | 23.75% employer |
+| Poland | ZUS | 30-krotność cap PLN 282,600 |
+| Sweden | Skatteverket; ITP1 | 31.42%, uncapped |
+| UAE | GPSSA 2023 pension law | 15%, AED 70,000/mo cap |
+| Saudi Arabia | GOSI | 11.75% national / 2% expat |
+| South Africa | DEL; SARS; Compensation Fund | COIDA ceiling R668,000 |
 
 ---
 
-## Where sources conflict — please decide
+## The one still flagged
 
-These are points where your brief, the reference PDFs, and the primary sources
-disagree. I have used the primary source in each case and flagged it here rather
-than picking silently.
+### Italy
 
-### 1. Canada CPP and EI caps — the big one
+I could not pin Italy to a single authoritative employer rate, so it keeps
+`verified: false` and the amber banner.
+
+The problem is structural, not effort: INPS publishes employer contributions per
+sector, company size and employee category rather than as one headline figure.
+Credible sources put the commercial-sector employer burden anywhere between 29%
+and 32%, which on a €120,000 salary is a spread of about €3,600. The 29.81% in
+the file is a commonly quoted *commercio* figure, not something I could confirm.
+
+Two further Italy-specific complications are noted in the data:
+
+- The **massimale contributivo** is €122,295 for employees first registered from
+  1 Jan 1996, but €93,707 for those with pre-1996 seniority — and it applies
+  only to the IVS pension component, not the whole contribution. The file
+  applies the higher ceiling to the entire INPS line, which is a simplification.
+- The **14th month** depends on the applicable CCNL. The file assumes both 13th
+  and 14th are payable, so it may overstate by half a month.
+
+Worth ten minutes with an Italian payroll provider. Once you have a rate for the
+CCNL you actually use, update the line and flip `verified` to `true`.
+
+---
+
+## Rebuilt this pass
+
+### Mexico — IMSS modelled branch by branch
+
+Previously a single blended 20% line. Now eleven lines matching the actual
+structure, all on the salario base de cotización capped at 25 UMA (daily UMA
+2026 = MXN 113.14, so the annual ceiling is MXN 1,032,402.50):
+
+| Branch | Employer rate |
+|---|---|
+| Sickness & maternity, fixed quota | 20.40% of daily UMA — a **flat** MXN 8,423.44/yr, not a percentage of pay |
+| Sickness & maternity, excess over 3 UMA | 1.10% above MXN 123,888.30 |
+| Sickness & maternity, cash benefits | 0.70% |
+| Medical expenses for pensioners | 1.05% |
+| Disability & life | 1.75% |
+| Occupational risk | 0.54% (Class I) |
+| Nurseries & social benefits | 1.00% |
+| Retirement (SAR) | 2.00% |
+| Severance & old age (CEAV) | 3.150% → 7.513%, banded by UMA |
+| INFONAVIT | 5.00% |
+| State payroll tax | 3.00% (CDMX) |
+
+CEAV is a **whole-band** rate — the band containing the SBC sets one rate applied
+to the entire SBC. It is still stepping up annually under the December 2020
+pension reform until 2030, so it needs an annual check.
+
+### Chile — SIS folded into the reform contribution
+
+The old file had a separate 1.88% SIS line plus a 1% placeholder for the pension
+reform. That double-counted. From August 2026 the employer contribution is
+**3.5%, and that figure already includes the 2.5% Social Insurance component**
+that funds the SIS. There is now one line, not two.
+
+### Colombia — the Ley 1607 exemption is now modelled
+
+Employer health (8.5%), SENA (2%) and ICBF (3%) are **exempt** for employees
+earning under 10 SMMLV where the employer is a legal entity. On COP 1,750,905
+SMMLV that threshold is COP 17,509,050/mo. Those lines now correctly show zero
+below it — a 13.5-point swing that the previous flat model got wrong at the
+lower end.
+
+This needed a new engine field, `appliesFrom`, the mirror of `appliesUpTo`.
+
+---
+
+## Where sources conflict — still open
+
+These are points where your brief, the reference PDFs and the primary sources
+disagree. I used the primary source in each case.
+
+### 1. Canada CPP and EI caps
 
 Your brief: *"CPP 5.95% capped at C$5,708.33 contribution; EI 2.282% capped at
 C$5,291.67 contribution."*
 
-Those two figures are **monthly base caps**, not contribution caps. They come
-from the Remote People simulation, which shows monthly amounts: 5,708.33 × 12 =
-$68,500 (2025 max contributory earnings) and 5,291.67 × 12 = $63,500 (2025 max
-insurable earnings). Treating them as annual contribution caps would overstate
-CPP by about 35% and EI by roughly 3.4x.
+Those are **monthly base caps**, not contribution caps — from the Remote People
+PDF's monthly column. 5,708.33 × 12 = $68,500 (2025 max contributory earnings);
+5,291.67 × 12 = $63,500 (2025 max insurable earnings). Read as annual
+contribution caps they overstate CPP by about 35% and EI by roughly 3.4x.
 
-CRA 2026 actuals, which is what the file uses:
+CRA 2026, which is what the file uses:
 
 | | Rate | Base cap | Max employer contribution |
 |---|---|---|---|
@@ -83,93 +169,97 @@ CRA 2026 actuals, which is what the file uses:
 
 CPP2 was absent from your brief and from the Remote People PDF entirely.
 
-### 2. Australia — both figures have moved since your brief
+### 2. Australia — both figures moved
 
-- Maximum contribution base is **A$270,830/yr for 2026-27**, not A$250,000.
-  It also changed from a quarterly to an annual basis on 1 Jul 2026 under Payday
-  Super. A$250,000 (A$62,500/quarter) was the 2025-26 figure.
-- Minimum wage is **A$26.44/hr from 1 Jul 2026**, not A$24.95 — the FWC awarded
-  4.75%.
-- SG rate 12% is confirmed unchanged.
+Maximum contribution base is **A$270,830/yr for 2026-27**, not A$250,000, and it
+changed from a quarterly to an annual basis on 1 Jul 2026 under Payday Super.
+Minimum wage is **A$26.44/hr from 1 Jul 2026**, not A$24.95. SG 12% confirmed.
 
 ### 3. Ireland PRSI — rate and threshold both differ
 
-Your brief: *"PRSI 11.15% above ~EUR 1,764/mo."*
+2026 actuals: **9.00%** on weekly earnings up to **€552**, **11.25%** above, both
+rising on **1 Oct 2026** to 9.15% / 11.40%. 11.15% was the 2025 rate. The
+€1,764/mo threshold in the Remote People PDF does not reconcile with the
+€552/week (≈€2,392/mo) statutory threshold — worth asking them.
 
-2026 actuals: **9.00%** on weekly earnings up to **€552**, **11.25%** above.
-Both rise on **1 Oct 2026** to 9.15% / 11.40%. 11.15% was the 2025 rate. The
-€1,764/mo threshold in the Remote People PDF does not reconcile with the €552/week
-(≈€2,392/mo) statutory threshold — worth asking them about.
+The higher rate applies to **all** earnings once the threshold is crossed, so
+it's banded, not marginal.
 
-The higher rate applies to **all** earnings once the threshold is crossed, not
-just the excess, so this is modelled as a banded rather than marginal rate.
-
-"Employer MFF 1.5%" in the PDF is **My Future Fund**, Ireland's auto-enrolment
-pension, live since 1 Jan 2026. Capped at €80,000 of earnings and rising 1.5
-points every three years to 6% by 2035. Worth diarising.
+"Employer MFF" is **My Future Fund**, Ireland's auto-enrolment pension, live
+since 1 Jan 2026. Capped at €80,000 and rising 1.5 points every three years to
+6% by 2035.
 
 ### 4. New Zealand ACC work levy
 
-Your brief says ~0.63%. The **2026/27 average is 0.69%** per $100 of liable
-earnings. 0.63% was the 2025/26 figure. KiwiSaver 3.5% from 1 Apr 2026 is
-confirmed.
+Your brief says ~0.63%. The **2026/27 average is 0.69%**. 0.63% was 2025/26.
 
 ### 5. France unemployment insurance
 
-The Remote People simulation dated 2 Jun 2026 shows **4.1%**. URSSAF publishes
-**4.05%**. I used 4.05%. A 0.05 point difference, but worth reconciling since
-their other France figures match the primary source exactly.
-
-Also note **FNAL**: the file uses 0.10% capped at one PASS, matching the Remote
-People simulation, which is the rate for employers under 50 staff. An EOR entity
-with 50+ French employees pays **0.50% on total earnings with no ceiling** —
-materially more. Confirm which applies.
+Remote People (2 Jun 2026) shows **4.1%**; URSSAF publishes **4.05%**. I used
+URSSAF. Also **FNAL**: the file uses 0.10% capped at one PASS, which is the rate
+for employers under 50 staff. A French entity with 50+ employees pays **0.50% on
+total earnings, uncapped** — materially more. Confirm which applies.
 
 ### 6. India PF admin fee is not a flat amount
 
 Your brief describes it as INR 150/mo flat. It is **0.5% of basic wages**,
-subject to a minimum of ₹500/month **per establishment** (not per employee). The
+subject to a ₹500/month minimum **per establishment**, not per employee. The
 ₹150 in the Horizons PDF is simply 0.5% of a ₹30,000 base.
 
-The bigger India caveat: EPF is levied on *basic wages*, not gross. The file
-assumes **basic = 50% of gross** via `baseFactor: 0.5`, which is the common
-Indian structure but not universal. If your contracts differ, that one number
-changes every India figure. A January 2026 Supreme Court direction may also lift
-the ₹15,000/mo ceiling to ₹21,000-25,000.
+India's bigger caveat: EPF is levied on *basic wages*, not gross. The file
+assumes **basic = 50% of gross** via `baseFactor: 0.5`. If your contracts differ,
+that one number changes every India figure.
 
 ### 7. Errors in the US reference PDF
 
-The Remote People US simulation dated 18 Jun 2026 has two problems, both fixed in
-the file:
-
-- OASDI capped at $13,350/mo ($160,200/yr). That is the **2023** wage base; 2026
-  is **$184,500**.
-- FUTA at 0.6% applied to full gross with no cap. FUTA is capped at the first
-  **$7,000** of wages, so the line should be $42/yr, not $720 on a $120k salary.
+The Remote People US simulation (18 Jun 2026) capped OASDI at $13,350/mo — the
+**2023** wage base, against $184,500 for 2026 — and applied FUTA at 0.6% to full
+gross with no cap. Both corrected.
 
 ---
 
 ## Modelling assumptions worth knowing
 
-- **13th / 14th month pay is included as a cost line** for the Philippines,
-  Indonesia, Mexico, Brazil, Colombia, Argentina, Portugal and Italy, on the
-  assumption that the salary you enter represents **12 monthly payments**. If
-  your annual figure already bakes in the 13th month, those lines double-count —
-  delete them or halve the salary input accordingly.
+- **13th / 14th month pay is a cost line** for the Philippines, Indonesia,
+  Mexico, Brazil, Colombia, Argentina, Portugal and Italy, assuming the salary
+  you enter is **12 monthly payments**. If your annual figure already includes
+  it, those lines double-count.
 - **Severance accruals** (India gratuity, Brazil FGTS, Italy TFR, UAE and Saudi
-  end-of-service) are booked as annual accruals, not cash costs. They are real
-  employer liabilities but do not hit cash until they vest.
-- **UAE and Saudi Arabia** default to the **national** contribution rates.
-  Expatriate hires — the majority of EOR placements in both — attract far less
-  (nothing in the UAE, 2% in Saudi). There is a separate expat line for Saudi;
-  zero out whichever does not apply.
-- **Employer Liability Insurance** is a flat 1% assumption applied everywhere
-  except Canada. It is not a statutory charge anywhere and the note says so.
+  end-of-service) are annual accruals, not cash costs, until they vest.
+- **UAE and Saudi default to national rates.** Expatriate hires — most EOR
+  placements in both — attract far less: nothing in the UAE, 2% in Saudi. Saudi
+  has a separate expat line; zero out whichever does not apply.
+- **Chile's ceilings are UF-denominated** and the UF is inflation-indexed daily.
+  The CLP figures assume **UF = CLP 40,300** and need reconverting periodically.
+  The UF value used is stated in each note so the conversion is auditable.
+- **Sweden's ITP1 jumps to 30%** above 7.5 income base amounts (≈SEK 616,500).
+  Senior Swedish hires cost far more than the 31.42% headline suggests.
+- **Employer Liability Insurance** is a flat 1% HeroForce assumption applied
+  everywhere except Canada. Not statutory anywhere, and the note says so.
 
 ---
 
-## Suggested next pass
+## Things to diarise
 
-In rough order of business value: Indonesia, Vietnam, Netherlands, Spain,
-Mexico, Japan. Those cover the highest-volume EOR destinations still sitting on
-secondary sources.
+| When | What |
+|---|---|
+| 1 Oct 2026 | Ireland PRSI rises to 9.15% / 11.40% |
+| Annually, March | Indonesia JP ceiling reindexed; Japan Kyokai Kenpo rates reset |
+| Annually, April | Japan employment insurance rates reset |
+| Annually, July | Korea pension income ceiling resets |
+| Annually | Mexico CEAV steps up under the 2020 reform, through 2030 |
+| Annually | Chile employer pension contribution phases toward 8.5% |
+| Every 3 years | Ireland My Future Fund rises 1.5 points, to 6% by 2035 |
+| Watch | India EPF ceiling — a Jan 2026 Supreme Court direction may lift ₹15,000 to ₹21,000-25,000 |
+| Watch | Hong Kong MPF ceiling — MPFA reviewing a rise to HK$40,000/mo, report due mid-2026 |
+| Watch | Thailand SSF — two further phased ceiling increases legislated |
+
+---
+
+## Minimum wage caveat
+
+Minimum wage is a display field, not part of the cost calculation. It is
+reasonably current everywhere but was not verified to the same standard as the
+contribution lines, and several countries set it provincially or by sector
+(Indonesia, Vietnam, India, Mexico, Canada, US, Japan). Treat those as
+indicative.

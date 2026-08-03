@@ -32,6 +32,9 @@
  *                (India). Stated explicitly in the note when used.
  *   appliesUpTo  Contribution only applies if gross is at or below this figure
  *                (India ESIC coverage threshold). Above it, the line is zero.
+ *   appliesFrom  The mirror image: the line only applies ABOVE this figure.
+ *                Colombia exempts employer health, SENA and ICBF for employees
+ *                under 10 minimum wages.
  *   tiers        Ascending bands. `upTo` is the top of the band in annual local
  *                currency; the final band uses upTo: Infinity.
  *   tierMode     "marginal" each band's rate applies only to the slice of base
@@ -80,6 +83,7 @@ function computeTiered(def, gross) {
  */
 export function computeContribution(def, gross) {
   if (def.appliesUpTo != null && gross > def.appliesUpTo) return 0;
+  if (def.appliesFrom != null && gross < def.appliesFrom) return 0;
 
   if (def.fixedAnnual != null) return def.fixedAnnual;
   if (def.fixedMonthly != null) return def.fixedMonthly * 12;
@@ -97,8 +101,14 @@ export function describeRate(def) {
   if (def.fixedAnnual != null) return 'fixed';
   if (def.fixedMonthly != null) return 'fixed / mo';
   if (def.tiers) {
-    const parts = def.tiers.map((t) => pct(t.rate));
-    return def.tierMode === 'whole' ? parts.join(' | ') : parts.join(' → ');
+    // Zero-rate bands exist only to bound the paying bands (Canada CPP2), so
+    // they carry no information in a rate label.
+    const rates = def.tiers.map((t) => t.rate).filter((r) => r > 0);
+    if (rates.length === 0) return '—';
+    // Mexico's CEAV has eight bands; listing them all makes the cell
+    // unreadable, so collapse anything past a pair into a range.
+    if (rates.length > 2) return `${pct(Math.min(...rates))}–${pct(Math.max(...rates))}`;
+    return rates.map(pct).join(def.tierMode === 'whole' ? ' | ' : ' → ');
   }
   return pct(def.rate);
 }

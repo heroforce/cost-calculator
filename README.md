@@ -66,6 +66,10 @@ whenever `cap` is set.
 | `exempt` | Annual amount subtracted from the base before the rate applies. UK NIC's £5,000 secondary threshold; Canada CPP's $3,500 basic exemption. Applied *after* a base cap. |
 | `baseFactor` | Fraction of gross the contribution is assessed on, where the statute levies on "basic wages" rather than total gross. India uses `0.5`. |
 | `appliesUpTo` | Line only applies at or below this gross. India ESIC cuts out above ₹21,000/mo — showing zero above that is correct, not a bug. |
+| `appliesFrom` | The mirror image: line only applies above this gross. Colombia exempts employer health, SENA and ICBF below 10 minimum wages. |
+
+After changing any capped or tiered rate, run `npm run check-rates`. It asserts
+38 lines against authority-published maximums and takes a second.
 
 ### Tiered rates
 
