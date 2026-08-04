@@ -27,7 +27,7 @@ export default function SummaryCards({ result, country, fx, compare }) {
   return (
     <div className="summary">
       {cards.map((c) => (
-        <div key={c.label} className={`card stat${c.highlight ? ' highlight' : ''}`}>
+        <div key={c.label} className={`card stat-card${c.highlight ? ' highlight' : ''}`}>
           <p className="stat-label">{c.label}</p>
           <div className="stat-value">{c.value}</div>
           {c.sub && <div className="stat-sub">{c.sub}</div>}

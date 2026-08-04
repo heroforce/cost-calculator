@@ -4,7 +4,7 @@ import { calculateCost } from './lib/calc';
 import { getRate } from './lib/fx';
 import { parseSalary, formatRate } from './lib/format';
 
-import Badge from './components/Badge';
+import { Header, Hero, StatsBar } from './components/Chrome';
 import Controls from './components/Controls';
 import SummaryCards from './components/SummaryCards';
 import ContributionsTable from './components/ContributionsTable';
@@ -13,6 +13,10 @@ import LeaveCards from './components/LeaveCards';
 
 const DEFAULT_COUNTRY = 'Australia';
 const DEFAULT_SALARY = '120000';
+const DATA_AS_AT = 'August 2026';
+
+const COUNTRY_COUNT = Object.keys(countries).length;
+const VERIFIED_COUNT = Object.values(countries).filter((c) => c.verified).length;
 
 export default function App() {
   const [countryName, setCountryName] = useState(DEFAULT_COUNTRY);
@@ -52,17 +56,15 @@ export default function App() {
 
   return (
     <>
-      <div className="backdrop" />
-      <div className="shell">
-        <header>
-          <Badge>Powered by Employment Hero</Badge>
-          <h1>Global Employment Cost Calculator</h1>
-          <p className="lede">
-            Employer statutory costs for hiring in {Object.keys(countries).length} countries —
-            line by line, in local currency, with the source behind every rate.
-          </p>
-        </header>
+      <Header />
+      <Hero />
+      <StatsBar
+        countryCount={COUNTRY_COUNT}
+        verifiedCount={VERIFIED_COUNT}
+        updated={DATA_AS_AT}
+      />
 
+      <main className="container">
         <Controls
           country={country}
           countryName={countryName}
@@ -119,14 +121,14 @@ export default function App() {
         <CostBar result={result} country={country} />
 
         <LeaveCards country={country} />
+      </main>
 
-        <footer>
-          Figures are indicative and for illustration only. Industry-rated and state-varying
-          contributions (workers' compensation, payroll tax, accident insurance) use stated
-          national averages and will differ for any specific employer. Verify against the
-          relevant national authority before contracting.
-        </footer>
-      </div>
+      <footer>
+        Figures are indicative and for illustration only. Industry-rated and state-varying
+        contributions (workers' compensation, payroll tax, accident insurance) use stated national
+        averages and will differ for any specific employer. Verify against the relevant national
+        authority before contracting.
+      </footer>
     </>
   );
 }

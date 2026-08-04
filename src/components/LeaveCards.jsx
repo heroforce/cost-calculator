@@ -26,20 +26,24 @@ export default function LeaveCards({ country }) {
 
   return (
     <div className="card section">
-      <h2 className="section-title">Mandatory leave &amp; benefits</h2>
-      <p className="section-sub">
-        Statutory minimums. Collective agreements and individual contracts frequently exceed
-        these.
-      </p>
+      <div className="card-header">
+        <h2 className="section-title">Mandatory leave &amp; benefits</h2>
+        <p className="section-sub">
+          Statutory minimums. Collective agreements and individual contracts frequently exceed
+          these.
+        </p>
+      </div>
 
-      <div className="leave-grid">
-        {cards.map((c) => (
-          <div key={c.k} className="leave-card">
-            <div className="k">{c.k}</div>
-            <div className="v">{c.v}</div>
-            <div className="u">{c.u}</div>
-          </div>
-        ))}
+      <div className="card-body">
+        <div className="leave-grid">
+          {cards.map((c) => (
+            <div key={c.k} className="leave-card">
+              <div className="k">{c.k}</div>
+              <div className="v">{c.v}</div>
+              <div className="u">{c.u}</div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
