@@ -13,7 +13,7 @@ import LeaveCards from './components/LeaveCards';
 
 const DEFAULT_COUNTRY = 'Australia';
 const DEFAULT_SALARY = '120000';
-const DATA_AS_AT = 'August 2026';
+const DATA_AS_AT = 'October 2026';
 
 const COUNTRY_COUNT = Object.keys(countries).length;
 const VERIFIED_COUNT = Object.values(countries).filter((c) => c.verified).length;

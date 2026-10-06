@@ -9,8 +9,16 @@ const cases = [
   ['Philippines','SSS (Social Security System)',2000000,42000,'max SSS employer'],
   ['Australia','Superannuation Guarantee',400000,32499.60,'SG at MCB'],
   ['Singapore','Skills Development Levy',200000,135,'SDL contribution cap'],
-  ['Ireland','Pay-Related Social Insurance (PRSI, Class A)',20000,1800,'whole-band low rate'],
   ['United States','FUTA (Federal Unemployment)',300000,42,'FUTA capped'],
+
+  // --- Oct 2026 statutory changes ---
+  ['Ireland','Pay-Related Social Insurance (PRSI, Class A)',20000,20000*0.0915,'PRSI low band, from 1 Oct 2026'],
+  ['Ireland','Pay-Related Social Insurance (PRSI, Class A)',60000,60000*0.114,'PRSI high band, from 1 Oct 2026'],
+  ['India','Provident Fund (EPF)',1000000,300000*0.12,'EPF at new 25,000/mo ceiling'],
+  ['India','Provident Fund (EPF)',400000,400000*0.5*0.12,'EPF below ceiling, basic=50%'],
+  ['India','EDLI (Deposit Linked Insurance)',1000000,300000*0.005,'EDLI at new ceiling'],
+  ['Sri Lanka',"EPF (Employees' Provident Fund)",6000000,6000000*0.12,'Sri Lanka EPF uncapped'],
+  ['Sri Lanka',"ETF (Employees' Trust Fund)",6000000,6000000*0.03,'Sri Lanka ETF uncapped'],
 
   // --- new APAC ---
   ['Indonesia','JP (Pension Security)',500000000,133035600*0.02,'JP at 11,086,300/mo ceiling'],

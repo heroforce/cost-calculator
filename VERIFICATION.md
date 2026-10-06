@@ -1,15 +1,15 @@
 # Verification status
 
-As at 31 July 2026.
+As at 6 October 2026.
 
-**32 of 33 countries verified** against the national revenue or social security
+**33 of 34 countries verified** against the national revenue or social security
 authority. Every line carries the authority and effective date in its note.
 
 **Italy is the one exception** and still shows the amber banner. See below.
 
-The calculation engine is checked against 38 authority-published maximums —
+The calculation engine is checked against 44 authority-published maximums —
 Canada's $4,230.45 CPP and $1,572.30 EI, the Philippines' ₱42,360, Thailand's
-฿875/mo, Hong Kong's HK$1,500/mo, South Africa's R177.12/mo, and so on. All 38
+฿875/mo, Hong Kong's HK$1,500/mo, South Africa's R177.12/mo, and so on. All 44
 match exactly. Run them with:
 
 ```bash
@@ -21,7 +21,23 @@ thing standing between a typo and a wrong number in front of a client.
 
 ---
 
-## Verified (32)
+## Changes since the July pass
+
+Two diarised items came due and have been applied, one country added.
+
+| Country | Change | Effective |
+|---|---|---|
+| **India** | EPF wage ceiling **₹15,000 → ₹25,000/mo**, per Gazette Notification S.O. 5109(E). First increase since 2014. Applied to EPF, admin charges and EDLI — the annual cap moves from ₹180,000 to ₹300,000, so all three lines rise by up to 67%. Max employer EPS contribution ₹1,250 → ₹2,083/mo. | 17 Sep 2026 |
+| **Ireland** | Employer PRSI Class A **9.00% → 9.15%** and **11.25% → 11.40%**. The €552/week threshold is unchanged. | 1 Oct 2026 |
+| **Japan** | Minimum wage (display field only) ¥1,121 → **¥1,177/hr** national weighted average. Prefectural rates phase in between 1 Oct and 2 Dec 2026. | Oct 2026 |
+| **Sri Lanka** | Added. See below. | — |
+
+India is the one that matters commercially — it is a material cost increase on
+every Indian placement, not a rounding adjustment.
+
+---
+
+## Verified (33)
 
 ### Asia Pacific
 
@@ -36,7 +52,8 @@ thing standing between a typo and a wrong number in front of a client.
 | Vietnam | Vietnam Social Security | Ceiling ₫50,600,000/mo from 1 Jul 2026 |
 | Thailand | Social Security Office | Ceiling ฿17,500/mo from 1 Jan 2026 |
 | Hong Kong | MPFA | 5%, HK$30,000/mo ceiling |
-| India | EPFO (Jul 2026 notification); ESIC | Basic = 50% of gross assumption |
+| India | EPFO Gazette S.O. 5109(E); ESIC | Ceiling ₹25,000/mo from 17 Sep 2026; basic = 50% of gross assumption |
+| Sri Lanka | Dept of Labour; ETF Board; Gratuity Act 1983 | EPF 12% + ETF 3%, both **uncapped** |
 | Japan | Japan Pension Service; Kyokai Kenpo; MHLW | New childcare levy from Apr 2026 |
 | South Korea | NPS; NHIS; MOEL | Pension rose to 9.5% total |
 | Taiwan | Bureau of Labor Insurance; NHIA | Three separate ceilings |
@@ -58,7 +75,7 @@ thing standing between a typo and a wrong number in front of a client.
 | Country | Source | Key figures |
 |---|---|---|
 | United Kingdom | HMRC; The Pensions Regulator | NIC 15% over £5,000 |
-| Ireland | Revenue.ie; My Future Fund rules | PRSI banded 9.00% / 11.25% |
+| Ireland | Revenue.ie; My Future Fund rules | PRSI banded 9.15% / 11.40% from 1 Oct 2026 |
 | Germany | Deutsche Rentenversicherung; GKV; BA | Ceilings €69,750 / €101,400 |
 | France | URSSAF; AGIRC-ARRCO; AGS | PASS 2026 €48,060 |
 | Netherlands | Definitive 2026 premium percentages | Max premium wage €79,409 |
@@ -96,6 +113,40 @@ Two further Italy-specific complications are noted in the data:
 
 Worth ten minutes with an Italian payroll provider. Once you have a rate for the
 CCNL you actually use, update the line and flip `verified` to `true`.
+
+---
+
+## Sri Lanka — added 6 Oct 2026
+
+Three employer lines, and the structure is unusually simple for the region:
+
+| Line | Rate | Ceiling |
+|---|---|---|
+| EPF (Employees' Provident Fund) | 12% | **None** |
+| ETF (Employees' Trust Fund) | 3% | **None** |
+| Gratuity accrual | 4.17% | None |
+
+The thing to watch is that **neither EPF nor ETF has a salary ceiling**. Almost
+every other APAC country in this file caps out — Singapore at S$8,000/mo, Hong
+Kong at HK$30,000/mo, India now at ₹25,000/mo. Sri Lanka does not, so the 15%
+combined employer burden applies to the whole salary no matter how senior the
+hire. A high earner costs proportionally far more than the regional pattern
+would lead you to expect.
+
+Gratuity is payable at half a month per completed year, but only after five
+years' service and only where the employer has 15 or more staff. It is booked
+here as an accrual, not a cash cost.
+
+**One caveat worth knowing.** Unlike the other countries in this file, Sri Lanka
+has no Remote People or Horizons simulation behind it — your Downloads folder
+has been cleared since the July pass and the Sri Lanka PDF is gone. The rates
+come from the Department of Labour, the ETF Board and the Gratuity Act, and were
+consistent across several independent sources, but there is no EOR provider
+breakdown to cross-check them against. If you still have that simulation
+somewhere, worth a five-minute reconciliation.
+
+LKR was also added to `FRANKFURTER_GAPS` in `src/lib/fx.js` — the ECB does not
+publish a rupee rate, so FX skips straight to the fallback provider.
 
 ---
 
@@ -243,16 +294,20 @@ gross with no cap. Both corrected.
 
 | When | What |
 |---|---|
-| 1 Oct 2026 | Ireland PRSI rises to 9.15% / 11.40% |
-| Annually, March | Indonesia JP ceiling reindexed; Japan Kyokai Kenpo rates reset |
-| Annually, April | Japan employment insurance rates reset |
-| Annually, July | Korea pension income ceiling resets |
+| Jan 2027 | Spain publishes the new Orden de Cotización — base máxima and MEI both step up |
+| 1 Jan 2027 | Ireland My Future Fund year-two position; Singapore CPF announced changes take effect |
+| Annually, March | Indonesia JP ceiling reindexed; Japan Kyokai Kenpo rates reset; South Africa COIDA ceiling |
+| Annually, April | Japan employment insurance rates reset; NZ KiwiSaver and ACC levies |
+| Annually, July | Korea pension income ceiling resets; Australia SG thresholds |
 | Annually | Mexico CEAV steps up under the 2020 reform, through 2030 |
 | Annually | Chile employer pension contribution phases toward 8.5% |
 | Every 3 years | Ireland My Future Fund rises 1.5 points, to 6% by 2035 |
-| Watch | India EPF ceiling — a Jan 2026 Supreme Court direction may lift ₹15,000 to ₹21,000-25,000 |
-| Watch | Hong Kong MPF ceiling — MPFA reviewing a rise to HK$40,000/mo, report due mid-2026 |
+| Watch | Hong Kong MPF ceiling — MPFA reviewing a rise to HK$40,000/mo; report was due mid-2026, not yet acted on |
 | Watch | Thailand SSF — two further phased ceiling increases legislated |
+| Watch | Chile UF drift — the CLP ceilings assume UF = CLP 40,300 and need reconverting |
+
+Cleared and applied on 6 Oct 2026: Ireland's 1 Oct PRSI rise, and the India EPF
+ceiling that had been sitting on this list as a watch item since January.
 
 ---
 

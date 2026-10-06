@@ -17,7 +17,7 @@ const FALLBACK = 'https://open.er-api.com/v6/latest';
 
 /** Currencies the ECB does not publish, so Frankfurter can never serve them. */
 export const FRANKFURTER_GAPS = new Set([
-  'VND', 'ARS', 'COP', 'CLP', 'SAR', 'AED', 'TWD',
+  'VND', 'ARS', 'COP', 'CLP', 'SAR', 'AED', 'TWD', 'LKR',
 ]);
 
 const cache = new Map();

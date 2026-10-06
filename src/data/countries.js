@@ -296,23 +296,23 @@ export const countries = {
       'Provident Fund (EPF)': {
         rate: 0.12,
         baseFactor: 0.5,
-        cap: 180000,
+        cap: 300000,
         capType: 'base',
-        note: 'EPFO. 12% of BASIC wages, not gross. Modelled here on basic = 50% of gross, the common Indian structure — adjust baseFactor if your contracts differ. Statutory wage ceiling ₹15,000/mo (₹180,000/yr). A Jan 2026 Supreme Court direction may lift this ceiling to ₹21,000-25,000; watch for a revision.',
+        note: 'EPFO. 12% of BASIC wages, not gross. Modelled here on basic = 50% of gross, the common Indian structure — adjust baseFactor if your contracts differ. Statutory wage ceiling raised from ₹15,000/mo to ₹25,000/mo (₹300,000/yr) effective 17 Sep 2026 by Gazette Notification S.O. 5109(E) — the first increase since 2014. Maximum employer EPS contribution rose from ₹1,250 to ₹2,083/mo.',
       },
       'EPF Administrative Charges': {
         rate: 0.005,
         baseFactor: 0.5,
-        cap: 180000,
+        cap: 300000,
         capType: 'base',
-        note: 'EPFO, notified Jul 2026. 0.5% of basic wages. Subject to a minimum charge of ₹500/month per ESTABLISHMENT (not per employee), so the per-head cost is effectively the 0.5% shown for any establishment of reasonable size.',
+        note: 'EPFO. 0.5% of basic wages, on the same ₹25,000/mo ceiling that took effect 17 Sep 2026. Subject to a minimum charge of ₹500/month per ESTABLISHMENT (not per employee), so the per-head cost is effectively the 0.5% shown for any establishment of reasonable size.',
       },
       'EDLI (Deposit Linked Insurance)': {
         rate: 0.005,
         baseFactor: 0.5,
-        cap: 180000,
+        cap: 300000,
         capType: 'base',
-        note: 'EPFO, notified Jul 2026. 0.5% of basic wages, employer-funded. EDLI administrative charges are waived.',
+        note: 'EPFO. 0.5% of basic wages, employer-funded, on the same ₹25,000/mo ceiling that took effect 17 Sep 2026. EDLI administrative charges are waived.',
       },
       ESIC: {
         rate: 0.0325,
@@ -327,6 +327,29 @@ export const countries = {
     },
     leave: { annualDays: 15, sickDays: 12, parentalWeeks: 26 },
     minWage: { amount: 176, period: 'day' },
+  },
+
+  'Sri Lanka': {
+    currency: 'LKR',
+    symbol: 'Rs',
+    verified: true,
+    excludeELI: false,
+    employer: {
+      "EPF (Employees' Provident Fund)": {
+        rate: 0.12,
+        note: 'Department of Labour / Central Bank of Sri Lanka, 2026. 12% employer contribution on total monthly earnings. Unusually for the region there is NO salary ceiling — the rate applies to the whole salary however senior the hire. The employee contributes a further 8%.',
+      },
+      "ETF (Employees' Trust Fund)": {
+        rate: 0.03,
+        note: "Employees' Trust Fund Board, 2026. 3% on total monthly earnings, no ceiling. Employer-funded in full — the employee contributes nothing to the ETF.",
+      },
+      'Gratuity Accrual': {
+        rate: 0.041667,
+        note: 'Payment of Gratuity Act No. 12 of 1983. Half a month\'s salary per completed year of service, payable once the employee passes five years, and only where the employer has 15 or more staff. 4.17% is the annual accrual convention — booked as an accrual, not a cash cost, until it vests.',
+      },
+    },
+    leave: { annualDays: 14, sickDays: 7, parentalWeeks: 12 },
+    minWage: { amount: 30000, period: 'mo' },
   },
 
   Japan: {
@@ -369,7 +392,7 @@ export const countries = {
       },
     },
     leave: { annualDays: 10, sickDays: 0, parentalWeeks: 58 },
-    minWage: { amount: 1121, period: 'hr' },
+    minWage: { amount: 1177, period: 'hr' },
   },
 
   'South Korea': {
@@ -795,11 +818,11 @@ export const countries = {
     employer: {
       'Pay-Related Social Insurance (PRSI, Class A)': {
         tiers: [
-          { upTo: 28704, rate: 0.09 },
-          { upTo: Infinity, rate: 0.1125 },
+          { upTo: 28704, rate: 0.0915 },
+          { upTo: Infinity, rate: 0.114 },
         ],
         tierMode: 'whole',
-        note: 'Revenue.ie. 9.00% on weekly earnings up to €552, 11.25% above €552 — and the higher rate applies to ALL earnings, not just the excess, which is why this is a banded rather than marginal rate. Threshold annualised as €552 x 52 = €28,704. Both rates rise on 1 Oct 2026 to 9.15% / 11.40%.',
+        note: 'Revenue.ie. From 1 Oct 2026: 9.15% on weekly earnings up to €552, 11.40% above €552 (up from 9.00% / 11.25%). The higher rate applies to ALL earnings, not just the excess, which is why this is a banded rather than marginal rate. Threshold annualised as €552 x 52 = €28,704; the threshold itself rose from €527 to €552 on 1 Jan 2026 and is unchanged by the October rate rise.',
       },
       'My Future Fund (auto-enrolment)': {
         rate: 0.015,
